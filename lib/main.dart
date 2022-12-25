@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'diary_edit.dart';
+import 'diary_list.dart';
 
 void main() {
   runApp(const MyApp());
@@ -7,7 +9,6 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -37,19 +38,41 @@ class _DiaryHomePageState extends State<DiaryHomePage> {
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
+
+        leading: IconButton(
+          onPressed: () {},
+          icon: const Icon(Icons.menu),
+        ),
+
+        actions: <Widget>[
+          IconButton(onPressed: () {}, icon: const Icon(Icons.star)),
+          IconButton(onPressed: () {}, icon: const Icon(Icons.search)),
+        ],
       ),
+
       body: const Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-          child: Text(
-              "Hello World!"
-          )
+        child: DiaryList(),
       ),
+
       floatingActionButton: FloatingActionButton(
         onPressed: () => {},
         tooltip: 'Increment',
         child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      ),
+
+      bottomNavigationBar: BottomNavigationBar(
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: "Home"
+          ),
+
+          BottomNavigationBarItem(
+              icon: Icon(Icons.calendar_month),
+              label: "Calendar"
+          ),
+        ],
+      ),
     );
   }
 }
