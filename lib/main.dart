@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert';
+
 import 'diary_edit.dart';
 import 'diary_list.dart';
+import 'diary_model.dart';
+import 'constants.dart';
 
 void main() {
   runApp(const MyApp());
@@ -18,6 +23,7 @@ class MyApp extends StatelessWidget {
       ),
       home: const DiaryHomePage(title: "Diary App")
     );
+
   }
 }
 
@@ -31,6 +37,70 @@ class DiaryHomePage extends StatefulWidget {
 }
 
 class _DiaryHomePageState extends State<DiaryHomePage> {
+
+  List<Diary> diaryEntries = [];
+
+  // Function to set diary entries. Possible modes are append, delete and update.
+  // Then it will sort the diary entries by createdDate and write it to disk.
+  void setDiaryEntries(Diary newDiary, Mode mode, [int index=-1]) {
+    setState(() {
+      switch (mode) {
+        case Mode.add:
+          diaryEntries.add(newDiary);
+          break;
+
+        case Mode.update:
+          if (index != -1) {
+            diaryEntries[index] = newDiary;
+          }
+          break;
+
+        case Mode.delete:
+          diaryEntries.remove(newDiary);
+          break;
+      }
+
+      // sort the entries by date of creation (in descending order)
+      diaryEntries.sort((a, b) => b.createdDate.compareTo(a.createdDate));
+    });
+
+    _writeDiaryEntries();
+  }
+
+  // Load SharedPreferences in homepage and load all (or some) list entries to the state.
+  void _readDiaryEntries() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String>? jsonEntries = prefs.getStringList("diaryEntries");
+
+    if (jsonEntries != null) {
+      for (var jsonEntry in jsonEntries) {
+        diaryEntries.add(Diary.fromJSON(jsonDecode(jsonEntry)));
+      }
+    }
+
+    // state is set-up up reflect the changes in diary entries
+    setState(() {});
+  }
+
+  Future<void> _writeDiaryEntries() async {
+    // converting list to json strings to write
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    final jsonEntries = diaryEntries.map((diary) => Diary.toJSONString(diary)).toList();
+    await prefs.setStringList("diaryEntries", jsonEntries);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _readDiaryEntries();
+  }
+
+  @override
+  void dispose() {
+    _writeDiaryEntries();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,18 +115,28 @@ class _DiaryHomePageState extends State<DiaryHomePage> {
         ),
 
         actions: <Widget>[
-          IconButton(onPressed: () {}, icon: const Icon(Icons.star)),
+          IconButton(onPressed: () {}, icon: const Icon(Icons.favorite_outline)),
+          IconButton(onPressed: () {}, icon: const Icon(Icons.sell_outlined)),
           IconButton(onPressed: () {}, icon: const Icon(Icons.search)),
         ],
       ),
 
-      body: const Center(
-        child: DiaryList(),
+      body: Center(
+        child: diaryEntries.isNotEmpty
+            ? DiaryList(diaryEntries: diaryEntries, setDiaryEntries: setDiaryEntries)
+            : const Text("No diary entries"),
       ),
 
       floatingActionButton: FloatingActionButton(
-        onPressed: () => {},
-        tooltip: 'Increment',
+        onPressed: () {
+          Navigator.push(
+            context, 
+            MaterialPageRoute(
+              builder: (context) => DiaryEdit(setDiaryEntries: setDiaryEntries),
+            )
+          );
+        },
+        tooltip: 'Add diary entry',
         child: const Icon(Icons.add),
       ),
 
