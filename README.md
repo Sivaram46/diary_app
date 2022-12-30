@@ -48,3 +48,12 @@ Change color of each entry (like in Google keeps). [ Automatically change color 
 
 [ ] - Additional features 
 
+## Tasks
+
+# Things in menu
+- option to create/change app password
+- theme change: dark or light theme
+- reminder setting: when to show reminder everyday
+- option to export and import data
+  - export can be done in Documents/DiaryApp/<dairy_app_timestamp>.csv
+

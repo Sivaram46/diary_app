@@ -1,11 +1,21 @@
 import 'package:flutter/material.dart';
 import 'diary_model.dart';
-import 'constants.dart';
 
 class DiaryView extends StatelessWidget {
-  const DiaryView({super.key, required this.diaryEntry, required this.setDiaryEntries});
+  const DiaryView({
+    super.key,
+    required this.diaryEntry,
+    required this.addDiaryEntry,
+    required this.updateDiaryEntry,
+    required this.deleteDiaryEntry,
+    required this.setIsEdit,
+  });
+
   final Diary diaryEntry;
-  final void Function(Diary, Mode, [int]) setDiaryEntries;
+  final void Function(Diary) addDiaryEntry;
+  final void Function(Diary) deleteDiaryEntry;
+  final void Function(Diary, Diary) updateDiaryEntry;
+  final void Function(bool) setIsEdit;
 
   @override
   Widget build(BuildContext context) {
@@ -20,16 +30,18 @@ class DiaryView extends StatelessWidget {
         ),
         actions: [
           IconButton(
-              onPressed: () {},
-              icon: const Icon(Icons.edit)
+              icon: const Icon(Icons.edit),
+              onPressed: () {
+                setIsEdit(true);
+              },
           ),
           IconButton(
+              icon: const Icon(Icons.share),
               onPressed: () {},
-              icon: const Icon(Icons.share)
           ),
           IconButton(
+              icon: const Icon(Icons.delete),
               onPressed: () {},
-              icon: const Icon(Icons.delete)
           ),
         ],
       ),

@@ -1,13 +1,21 @@
 import 'package:flutter/material.dart';
 import 'diary_model.dart';
 import 'constants.dart';
-import 'diary_view.dart';
+import 'diary_page.dart';
 
 class DiaryListEntry extends StatefulWidget {
-  const DiaryListEntry({super.key, required this.diaryEntry, required this.setDiaryEntries});
+  const DiaryListEntry({
+    super.key,
+    required this.diaryEntry,
+    required this.updateDiaryEntry,
+    required this.addDiaryEntry,
+    required this.deleteDiaryEntry,
+  });
 
   final Diary diaryEntry;
-  final void Function(Diary, Mode, [int]) setDiaryEntries;
+  final void Function(Diary) addDiaryEntry;
+  final void Function(Diary) deleteDiaryEntry;
+  final void Function(Diary, Diary) updateDiaryEntry;
 
   @override
   State<DiaryListEntry> createState() => _DiaryListEntryState();
@@ -16,21 +24,31 @@ class DiaryListEntry extends StatefulWidget {
 class _DiaryListEntryState extends State<DiaryListEntry> {
   @override
   Widget build(BuildContext context) {
+    String titleText = widget.diaryEntry.title ?? "";
+    String? month = monthMap[widget.diaryEntry.createdDate.month];
+    // TODO: Customize tile such that month under CircleAvatar and show title if present...
     return ListTile(
-      title: Text(widget.diaryEntry.title ?? "No title"),
-      // TODO: Set body as ListTile.title when title is null
-      // subtitle: Text(widget.diaryEntryToShow.body),
-      leading: CircleAvatar(
-        backgroundColor: Colors.blue,
-        child: Text(widget.diaryEntry.createdDate.day.toString()),
+      title: Text(titleText.isNotEmpty ? titleText : "No title"),
+      leading: Column(
+        children: [
+          CircleAvatar(
+            backgroundColor: Colors.blue,
+            child: Text(widget.diaryEntry.createdDate.day.toString()),
+          ),
+          Text(month ?? ""),
+        ],
       ),
+
       onTap: () {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => DiaryView(
-                diaryEntry: widget.diaryEntry,
-                setDiaryEntries: widget.setDiaryEntries,
+            builder: (context) => DiaryPage(
+              diaryEntry: widget.diaryEntry,
+              addDiaryEntry: widget.addDiaryEntry,
+              updateDiaryEntry: widget.updateDiaryEntry,
+              deleteDiaryEntry: widget.deleteDiaryEntry,
+              isEdit: false,
             ),
           ),
         );
@@ -41,10 +59,18 @@ class _DiaryListEntryState extends State<DiaryListEntry> {
 
 
 class DiaryList extends StatefulWidget {
-  const DiaryList({super.key, required this.diaryEntries, required this.setDiaryEntries});
+  const DiaryList({
+    super.key,
+    required this.diaryEntries,
+    required this.updateDiaryEntry,
+    required this.addDiaryEntry,
+    required this.deleteDiaryEntry,
+  });
 
   final List<Diary> diaryEntries;
-  final void Function(Diary, Mode, [int]) setDiaryEntries;
+  final void Function(Diary) addDiaryEntry;
+  final void Function(Diary) deleteDiaryEntry;
+  final void Function(Diary, Diary) updateDiaryEntry;
 
   @override
   State<DiaryList> createState() => _DiaryListState();
@@ -59,7 +85,9 @@ class _DiaryListState extends State<DiaryList> {
         itemBuilder: (BuildContext context, int index) {
           return DiaryListEntry(
             diaryEntry: widget.diaryEntries[index],
-            setDiaryEntries: widget.setDiaryEntries,
+            updateDiaryEntry: widget.updateDiaryEntry,
+            addDiaryEntry: widget.addDiaryEntry,
+            deleteDiaryEntry: widget.deleteDiaryEntry,
           );
         },
 
