@@ -1,12 +1,12 @@
 import 'dart:convert';
 
 class Diary {
-  final DateTime createdDate;
-  final String? title;
-  final String body;
-  final String? mood;
+  DateTime createdDate;
+  String body;
+  String? title;
+  String? mood;
 
-  const Diary({
+  Diary({
     required this.createdDate,
     required this.body,
     this.title,
@@ -31,4 +31,16 @@ class Diary {
     String dateString = createdDate.toString();
     return 'Diary create on: $dateString with title: $title';
   }
+
+  @override
+  bool operator ==(other) => (
+    other is Diary &&
+    createdDate == other.createdDate &&
+    body == other.body &&
+    title == other.title &&
+    mood == other.mood
+  );
+
+  @override
+  int get hashCode => Object.hash(createdDate, body, title, mood);
 }
