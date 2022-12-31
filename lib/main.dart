@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'diary_list.dart';
 import 'diary_page.dart';
 import 'diary_model.dart';
+import 'calendar_view.dart';
 import 'populate_diary_data.dart';
 
 void main() {
@@ -39,6 +40,7 @@ class DiaryHomePage extends StatefulWidget {
 class _DiaryHomePageState extends State<DiaryHomePage> {
 
   List<Diary> diaryEntries = [];
+  int bottomItem = 1;
 
   // Function to set diary entries. Possible modes are append, delete and update.
   // Then it will sort the diary entries by createdDate and write it to disk.
@@ -115,6 +117,12 @@ class _DiaryHomePageState extends State<DiaryHomePage> {
     super.dispose();
   }
 
+  void _onBottomItemTapped(int index) {
+    setState(() {
+      bottomItem = index;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     // print("length: ${diaryEntries.length}");
@@ -131,22 +139,34 @@ class _DiaryHomePageState extends State<DiaryHomePage> {
 
         actions: <Widget>[
           IconButton(onPressed: () {}, icon: const Icon(Icons.favorite_outline)),
-          IconButton(onPressed: () {}, icon: const Icon(Icons.sell_outlined)),
+          // IconButton(onPressed: () {}, icon: const Icon(Icons.sell_outlined)),
           IconButton(onPressed: () {}, icon: const Icon(Icons.search)),
         ],
       ),
 
-      body: Center(
-        child:
-          diaryEntries.isNotEmpty
-          ? DiaryList(
-            diaryEntries: diaryEntries,
-            updateDiaryEntry: updateDiaryEntry,
-            addDiaryEntry: addDiaryEntry,
-            deleteDiaryEntry: deleteDiaryEntry,
-          ) :
-          const Text("No diary entries"),
-      ),
+      body: <Widget>[
+        // Diary list view
+        Center(
+          child:
+            diaryEntries.isNotEmpty
+            ? DiaryList(
+              diaryEntries: diaryEntries,
+              updateDiaryEntry: updateDiaryEntry,
+              addDiaryEntry: addDiaryEntry,
+              deleteDiaryEntry: deleteDiaryEntry,
+            ) :
+            const Text("No diary entries"),
+        ),
+
+        // Calendar view
+        CalendarView(
+          diaryEntries: diaryEntries,
+          updateDiaryEntry: updateDiaryEntry,
+          addDiaryEntry: addDiaryEntry,
+          deleteDiaryEntry: deleteDiaryEntry,
+        ),
+
+      ].elementAt(bottomItem),
 
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -169,8 +189,8 @@ class _DiaryHomePageState extends State<DiaryHomePage> {
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: "Home"
+            icon: Icon(Icons.list),
+            label: "Diary"
           ),
 
           BottomNavigationBarItem(
@@ -178,6 +198,8 @@ class _DiaryHomePageState extends State<DiaryHomePage> {
               label: "Calendar"
           ),
         ],
+        onTap: _onBottomItemTapped,
+        currentIndex: bottomItem,
       ),
     );
   }
