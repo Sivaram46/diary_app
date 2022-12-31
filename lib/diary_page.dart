@@ -44,6 +44,7 @@ class _DiaryPageState extends State<DiaryPage> {
   @override
   Widget build(BuildContext context) {
     return
+    // TODO: Add some animation when switching from one to other
       isEdit ?
       DiaryEdit(
         diaryEntry: widget.diaryEntry,
