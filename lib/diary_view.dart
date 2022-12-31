@@ -1,4 +1,6 @@
+import 'package:diary_app/diary_share.dart';
 import 'package:flutter/material.dart';
+import 'package:share_plus/share_plus.dart';
 import 'diary_model.dart';
 
 class DiaryView extends StatelessWidget {
@@ -58,10 +60,9 @@ class DiaryView extends StatelessWidget {
                 setIsEdit(true);
               },
           ),
-          IconButton(
-              icon: const Icon(Icons.share),
-              onPressed: () {},
-          ),
+
+          DiaryShare(diaryEntry: diaryEntry),
+
           IconButton(
               icon: const Icon(Icons.delete),
               onPressed: () async {

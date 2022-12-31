@@ -28,8 +28,31 @@ class Diary {
 
   @override
   String toString() {
-    String dateString = createdDate.toString();
-    return 'Diary create on: $dateString with title: $title';
+    /*
+      For a diary with
+      {createdDate: 1/1/2022, title: "Sample title", body: "This is a brief summary..."}
+      the output will be like,
+
+      CREATED ON: 01/01/2022
+      ------------
+      Sample title
+      ------------
+      This is a brief summary...
+
+      - Diary App
+
+    */
+    String datePart = 'CREATED ON: '
+                      '${createdDate.day.toString().padLeft(2, '0')}/'
+                      '${createdDate.month.toString().padLeft(2, '0')}/'
+                      '${createdDate.year.toString()}';
+    String titlePart = title != null ? "${'-' * 60}\n$title\n${'-' * 60}" : "";
+    String result = "$datePart\n"
+                    "$titlePart${titlePart.isNotEmpty ? '\n' : ''}"
+                    "$body\n\n"
+                    "- Diary App";
+
+    return result;
   }
 
   @override
