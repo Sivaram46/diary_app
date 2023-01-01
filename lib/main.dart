@@ -6,6 +6,7 @@ import 'diary_list.dart';
 import 'diary_page.dart';
 import 'diary_model.dart';
 import 'calendar_view.dart';
+import 'diary_drawer.dart';
 import 'populate_diary_data.dart';
 
 void main() {
@@ -18,13 +19,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Diary App',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const DiaryHomePage(title: "Diary App")
-    );
-
+        title: 'Diary App',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        home: const DiaryHomePage(title: "Diary App"));
   }
 }
 
@@ -38,7 +37,6 @@ class DiaryHomePage extends StatefulWidget {
 }
 
 class _DiaryHomePageState extends State<DiaryHomePage> {
-
   List<Diary> diaryEntries = [];
   int bottomItem = 1;
 
@@ -74,7 +72,6 @@ class _DiaryHomePageState extends State<DiaryHomePage> {
     _writeDiaryEntries();
   }
 
-
   // Load SharedPreferences in homepage and load all (or some) list entries to the state.
   void _readDiaryEntries() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -101,7 +98,8 @@ class _DiaryHomePageState extends State<DiaryHomePage> {
   Future<void> _writeDiaryEntries() async {
     // converting list to json strings to write
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    final jsonEntries = diaryEntries.map((diary) => Diary.toJSONString(diary)).toList();
+    final jsonEntries =
+        diaryEntries.map((diary) => Diary.toJSONString(diary)).toList();
     await prefs.setStringList("diaryEntries", jsonEntries);
   }
 
@@ -132,30 +130,27 @@ class _DiaryHomePageState extends State<DiaryHomePage> {
         // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
 
-        leading: IconButton(
-          onPressed: () {},
-          icon: const Icon(Icons.menu),
-        ),
-
         actions: <Widget>[
-          IconButton(onPressed: () {}, icon: const Icon(Icons.favorite_outline)),
+          IconButton(
+              onPressed: () {}, icon: const Icon(Icons.favorite_outline)),
           // IconButton(onPressed: () {}, icon: const Icon(Icons.sell_outlined)),
           IconButton(onPressed: () {}, icon: const Icon(Icons.search)),
         ],
       ),
 
+      drawer: DiaryDrawer(),
+
       body: <Widget>[
         // Diary list view
         Center(
-          child:
-            diaryEntries.isNotEmpty
-            ? DiaryList(
-              diaryEntries: diaryEntries,
-              updateDiaryEntry: updateDiaryEntry,
-              addDiaryEntry: addDiaryEntry,
-              deleteDiaryEntry: deleteDiaryEntry,
-            ) :
-            const Text("No diary entries"),
+          child: diaryEntries.isNotEmpty
+              ? DiaryList(
+                  diaryEntries: diaryEntries,
+                  updateDiaryEntry: updateDiaryEntry,
+                  addDiaryEntry: addDiaryEntry,
+                  deleteDiaryEntry: deleteDiaryEntry,
+                )
+              : const Text("No diary entries"),
         ),
 
         // Calendar view
@@ -165,9 +160,7 @@ class _DiaryHomePageState extends State<DiaryHomePage> {
           addDiaryEntry: addDiaryEntry,
           deleteDiaryEntry: deleteDiaryEntry,
         ),
-
       ].elementAt(bottomItem),
-
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(
@@ -185,18 +178,11 @@ class _DiaryHomePageState extends State<DiaryHomePage> {
         tooltip: 'Add diary entry',
         child: const Icon(Icons.add),
       ),
-
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(icon: Icon(Icons.list), label: "Diary"),
           BottomNavigationBarItem(
-            icon: Icon(Icons.list),
-            label: "Diary"
-          ),
-
-          BottomNavigationBarItem(
-              icon: Icon(Icons.calendar_month),
-              label: "Calendar"
-          ),
+              icon: Icon(Icons.calendar_month), label: "Calendar"),
         ],
         onTap: _onBottomItemTapped,
         currentIndex: bottomItem,

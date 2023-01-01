@@ -4,6 +4,11 @@ enum Mode {
   update
 }
 
+enum DiaryTheme {
+  light,
+  dark,
+}
+
 final Map<int, String> monthMap = {
   1 : 'Jan',
   2 : 'Feb',
