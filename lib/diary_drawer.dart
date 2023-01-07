@@ -174,6 +174,7 @@ class _DiaryDrawerState extends State<DiaryDrawer> {
 
           const Divider(),
 
+          // TODO: Feature to change theme of app
           ListTile(
             leading: _lightTheme
                 ? const Icon(Icons.brightness_6)
@@ -199,6 +200,7 @@ class _DiaryDrawerState extends State<DiaryDrawer> {
           const Divider(),
 
           // set reminder
+          // TODO: Feature to set reminder
           ListTile(
             leading: _isNotif
                 ? const Icon(Icons.notifications_active)
@@ -208,6 +210,7 @@ class _DiaryDrawerState extends State<DiaryDrawer> {
           ),
           const Divider(),
 
+          // TODO: Feature to import and export diary entries
           ListTile(
             leading: const Icon(Icons.import_export),
             title: const Text("Export/Import Entries"),

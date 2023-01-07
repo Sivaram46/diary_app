@@ -1,7 +1,9 @@
 import 'package:diary_app/diary_share.dart';
 import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
-import 'diary_model.dart';
+
+ import 'diary_model.dart';
+ import 'date_select.dart';
 
 class DiaryView extends StatelessWidget {
   const DiaryView({
@@ -80,27 +82,50 @@ class DiaryView extends StatelessWidget {
       ),
 
       // TODO: Bug - First diary element is unable to edit.
-      body: Column(
-        children: <Widget>[
-          // TODO: Better date show UI
-          Text("${diaryEntry.createdDate.day}-${diaryEntry.createdDate.month}-${diaryEntry.createdDate.year}"),
-
-          Text(
-            diaryEntry.title ?? "",
-            style: const TextStyle(
-              fontWeight: FontWeight.bold
+      body: Container(
+        padding: const EdgeInsets.all(8),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            DateSelect(
+              createdDate: diaryEntry.createdDate,
+              isView: true,
+              onDateTap: () {},
+              onEmojiTap: () {},
             ),
-          ),
 
-          Expanded(
-            child: SingleChildScrollView(
+            const Divider(),
+
+            (diaryEntry.title != null && diaryEntry.title!.isNotEmpty) ?
+            Container(
+              padding: const EdgeInsets.only(bottom: 3),
               child: Text(
-                diaryEntry.body,
-                overflow: TextOverflow.visible,
+                diaryEntry.title ?? "",
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.bold
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ) : Container(height: 0,),
+
+            Container(
+              padding: const EdgeInsets.only(top: 3),
+              child: Expanded(
+                child: SingleChildScrollView(
+                  child: Text(
+                    diaryEntry.body,
+                    overflow: TextOverflow.visible,
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      height: 1.3
+                    ),
+                  ),
+                ),
               ),
             ),
-          ),
-        ],
+
+          ],
+        ),
       ),
     );
   }

@@ -23,3 +23,13 @@ final Map<int, String> monthMap = {
   11 : 'Nov',
   12 : 'Dec',
 };
+
+final Map<int, String> weekdayMap = {
+  1 : 'Monday',
+  2 : 'Tuesday',
+  3 : 'Wednesday',
+  4 : 'Thursday',
+  5 : 'Friday',
+  6 : 'Saturday',
+  7 : 'Sunday',
+};

@@ -11,6 +11,7 @@ import 'diary_drawer.dart';
 import 'lock_screen.dart';
 import 'populate_diary_data.dart';
 
+// TODO: Bug - Read from shared prefs not working
 void readPasswordPrefs(
   void Function(bool) setPasswordStatus,
   void Function(String) setPassword
@@ -106,6 +107,7 @@ class _DiaryHomePageState extends State<DiaryHomePage> {
   }
 
   // Load SharedPreferences in homepage and load all (or some) list entries to the state.
+  // TODO: Read/write from Sqlite db
   void _readDiaryEntries() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     List<String>? jsonEntries = prefs.getStringList("diaryEntries");

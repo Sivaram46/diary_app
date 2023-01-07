@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+
 import 'diary_model.dart';
+import 'date_select.dart';
 
 class DiaryEdit extends StatefulWidget {
   const DiaryEdit({
@@ -124,7 +126,6 @@ class _DiaryEditState extends State<DiaryEdit> {
     // WillPopScope is to show alert message even when pressing back button while
     // editing diary.
     return WillPopScope(
-      // TODO: Bug - Alert dialog shows for empty diary when back button is pressed
       onWillPop: _showAlertDialog,
       child: Scaffold(
         appBar: AppBar(
@@ -135,7 +136,7 @@ class _DiaryEditState extends State<DiaryEdit> {
             // or else don't show alert dialog, just pop to the home page.
             onPressed:
               // Condition to show alert dialog
-              bodyText.isNotEmpty ?
+              (bodyText.isNotEmpty && bodyText != widget.diaryEntry?.body)?
               () async {
                 final discarded = await _showAlertDialog();
                 // This is to avoid using context in async tasks. (Referred SO)
@@ -177,34 +178,54 @@ class _DiaryEditState extends State<DiaryEdit> {
               //  add top bar here which will hold Save, Go back, Pin/Star buttons
               // Container(),
 
-              // TODO: Display date picker as good
-              //  TODO: Mood picker at right
-              ElevatedButton(
-                  onPressed: () => _selectDate(context, selectedDate),
-                  child: Text("${selectedDate.day}-${selectedDate.month}-${selectedDate.year}")
+              DateSelect(
+                createdDate: selectedDate,
+                isView: false,
+                onDateTap: () {
+                  _selectDate(context);
+                },
+                onEmojiTap: () {},
               ),
 
+              const Divider(),
+
               // Title text field
-              TextField(
-                controller: titleController,
-                decoration: const InputDecoration(
-                  border: InputBorder.none,
-                  hintText: "Title",
+              Container(
+                padding: const EdgeInsets.only(bottom: 3),
+                child: TextField(
+                  controller: titleController,
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.bold
+                  ),
+                  decoration: const InputDecoration(
+                    isDense: true,
+                    contentPadding: EdgeInsets.all(0),
+                    border: InputBorder.none,
+                    hintText: "Title",
+                  ),
                 ),
               ),
 
               // Diary body text field
-              Expanded(
-                // maxLines: null,
-                child: TextField(
-                  controller: bodyController,
-                  decoration: const InputDecoration(
+              Container(
+                padding: const EdgeInsets.only(top: 3),
+                child: Expanded(
+                  // maxLines: null,
+                  child: TextField(
+                    controller: bodyController,
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        height: 1.3
+                    ),
+                    decoration: const InputDecoration(
+                      isDense: true,
+                      contentPadding: EdgeInsets.all(0),
                       border: InputBorder.none,
                       hintText: "Write here..."
+                    ),
+                    maxLines: null,
                   ),
-                  maxLines: null,
                 ),
-              ),
+              )
             ],
           ),
         ),
