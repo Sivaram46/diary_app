@@ -1,16 +1,49 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
+import 'package:flutter_app_lock/flutter_app_lock.dart';
 
 import 'diary_list.dart';
 import 'diary_page.dart';
 import 'diary_model.dart';
 import 'calendar_view.dart';
 import 'diary_drawer.dart';
+import 'lock_screen.dart';
 import 'populate_diary_data.dart';
 
-void main() {
-  runApp(const MyApp());
+void readPasswordPrefs(
+  void Function(bool) setPasswordStatus,
+  void Function(String) setPassword
+) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  bool status = prefs.getBool("passwordStatus") ?? false;
+  String pwd = prefs.getString("password") ?? "";
+  setPasswordStatus(status);
+  setPassword(pwd);
+}
+
+void main({
+  Duration backgroundLockLatency = const Duration(seconds: 1),
+}) {
+  // Set default password status and password
+  String password = "0000";
+  bool enabled = true;
+  void setPasswordStatus(bool status) { enabled = status; }
+  void setPassword(String pwd) { password = pwd; }
+  // Read it from disk
+  readPasswordPrefs(setPasswordStatus, setPassword);
+
+  runApp(AppLock(
+    builder: (arg) => const MyApp(
+      key: Key('MyApp'),
+    ),
+    lockScreen: LockScreen(
+      key: const Key('LockScreen'),
+      password: password,
+    ),
+    enabled: enabled,
+    backgroundLockLatency: backgroundLockLatency,
+  ));
 }
 
 class MyApp extends StatelessWidget {
@@ -38,7 +71,7 @@ class DiaryHomePage extends StatefulWidget {
 
 class _DiaryHomePageState extends State<DiaryHomePage> {
   List<Diary> diaryEntries = [];
-  int bottomItem = 1;
+  int bottomItem = 0;
 
   // Function to set diary entries. Possible modes are append, delete and update.
   // Then it will sort the diary entries by createdDate and write it to disk.
