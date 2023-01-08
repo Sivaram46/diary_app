@@ -70,6 +70,7 @@ class _CalendarViewState extends State<CalendarView> {
 
   // TODO: Pass the selected value in calendar when creating new diary entry
   // TODO: Bug - when diary entry is date changed, it still shows in old date
+  // TODO: Bug - adapt to dark theme in calendar
   @override
   Widget build(BuildContext context) {
     return Scaffold(

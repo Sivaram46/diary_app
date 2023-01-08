@@ -6,14 +6,20 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'constants.dart';
 
 class DiaryDrawer extends StatefulWidget {
-  const DiaryDrawer({Key? key}) : super(key: key);
+  const DiaryDrawer({
+    super.key,
+    required this.theme,
+    required this.setTheme,
+  });
+
+  final bool theme;
+  final void Function(bool) setTheme;
 
   @override
   State<DiaryDrawer> createState() => _DiaryDrawerState();
 }
 
 class _DiaryDrawerState extends State<DiaryDrawer> {
-  bool _lightTheme = true;
   bool _isLock = false;
   bool _isNotif = false;
   String _oldPassword = "";
@@ -42,6 +48,11 @@ class _DiaryDrawerState extends State<DiaryDrawer> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setBool("passwordStatus", _isLock);
     await prefs.setString("password", _password);
+  }
+
+  void writeTheme(bool theme) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('theme', theme);
   }
 
   Future<void> _setPassword(BuildContext parentContext) async {
@@ -176,14 +187,13 @@ class _DiaryDrawerState extends State<DiaryDrawer> {
 
           // TODO: Feature to change theme of app
           ListTile(
-            leading: _lightTheme
-                ? const Icon(Icons.brightness_6)
-                : const Icon(Icons.dark_mode),
+            leading: widget.theme
+                ? const Icon(Icons.dark_mode)
+                : const Icon(Icons.brightness_6),
             title: const Text("Change Theme"),
             onTap: () {
-              setState(() {
-                _lightTheme = !_lightTheme;
-              });
+              widget.setTheme(!widget.theme);
+              writeTheme(!widget.theme);
             },
           ),
           const Divider(),

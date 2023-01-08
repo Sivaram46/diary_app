@@ -47,24 +47,53 @@ void main({
   ));
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyApp();
+}
+
+class _MyApp extends State<MyApp> {
+  bool _isDark = true;
+
+  void setTheme(bool mode) {
+    setState(() {
+      _isDark = mode;
+    });
+  }
+
+  void readTheme() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool theme = prefs.getBool('theme') ?? true;
+    setTheme(theme);
+  }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
         title: 'Diary App',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
+        theme: _isDark ? ThemeData.dark(useMaterial3: true) : ThemeData.light(useMaterial3: true),
+        home: DiaryHomePage(
+          title: "Diary App",
+          theme: _isDark,
+          setTheme: setTheme,
         ),
-        home: const DiaryHomePage(title: "Diary App"));
+    );
   }
 }
 
 class DiaryHomePage extends StatefulWidget {
-  const DiaryHomePage({super.key, required this.title});
+  const DiaryHomePage({
+    super.key,
+    required this.title,
+    required this.theme,
+    required this.setTheme,
+  });
 
   final String title;
+  final bool theme;
+  final void Function(bool) setTheme;
 
   @override
   State<DiaryHomePage> createState() => _DiaryHomePageState();
@@ -173,7 +202,7 @@ class _DiaryHomePageState extends State<DiaryHomePage> {
         ],
       ),
 
-      drawer: DiaryDrawer(),
+      drawer: DiaryDrawer(theme: widget.theme, setTheme: widget.setTheme),
 
       body: <Widget>[
         // Diary list view

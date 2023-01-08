@@ -24,9 +24,6 @@ class DiaryListEntry extends StatefulWidget {
 class _DiaryListEntryState extends State<DiaryListEntry> {
   @override
   Widget build(BuildContext context) {
-    String titleText = widget.diaryEntry.title ?? "";
-    String? month = monthMap[widget.diaryEntry.createdDate.month];
-
     String title = widget.diaryEntry.title ?? "";
     DateTime createdDate = widget.diaryEntry.createdDate;
 
@@ -48,15 +45,15 @@ class _DiaryListEntryState extends State<DiaryListEntry> {
 
       child: Container(
         padding: const EdgeInsets.all(7),
-        height: 90,
+        height: 100,
         child: Row(
           children: <Widget>[
             // date display
             Container(
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
                 border: Border(
                   right: BorderSide(
-                    color: Colors.grey,
+                    color: Theme.of(context).dividerColor,
                     width: 2
                   ),
                 )
@@ -97,18 +94,11 @@ class _DiaryListEntryState extends State<DiaryListEntry> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  // layout to show time and day of week
-                  // Row(
-                  //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  //   children: <Widget>[
-                  //     Text(weekdayMap[createdDate.weekday] ?? "",),
-                  //     Text(createdDate.toString().substring(11, 16))
-                  //   ],
-                  // ),
-
                   // diary title
                   title.isNotEmpty ? Text(
                     title,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
                       fontWeight: FontWeight.bold
                     )
