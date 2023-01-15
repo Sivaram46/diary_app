@@ -76,8 +76,8 @@ class DiaryView extends StatelessWidget {
         ],
       ),
 
-      body: Container(
-        padding: const EdgeInsets.all(8),
+      body: Padding(
+        padding: const EdgeInsets.all(7),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
@@ -88,32 +88,28 @@ class DiaryView extends StatelessWidget {
               onEmojiTap: () {},
             ),
 
-            const Divider(),
+            const Divider(height: 7,),
 
             // Show title only when it is not empty
-            (diaryEntry.title.isNotEmpty) ?
-            Container(
-              padding: const EdgeInsets.only(bottom: 3),
-              child: Text(
+            diaryEntry.title.isNotEmpty
+            ? Text(
                 diaryEntry.title,
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.bold
                 ),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-              ),
-            ) : Container(height: 0,),
+              ) : Container(height: 0,),
 
-            Container(
-              padding: const EdgeInsets.only(top: 3),
-              child: Expanded(
-                child: SingleChildScrollView(
-                  child: Text(
-                    diaryEntry.body,
-                    overflow: TextOverflow.visible,
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                      height: 1.3
-                    ),
+            const SizedBox(height: 7,),
+
+            Expanded(
+              child: SingleChildScrollView(
+                child: Text(
+                  diaryEntry.body,
+                  overflow: TextOverflow.visible,
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    height: 1.3
                   ),
                 ),
               ),

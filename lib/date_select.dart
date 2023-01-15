@@ -22,6 +22,7 @@ class DateSelect extends StatelessWidget {
       height: 30,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           // date select
           InkWell(
@@ -35,7 +36,7 @@ class DateSelect extends StatelessWidget {
                 ),
 
                 Text(
-                  " ${monthMap[createdDate.month] ?? ""}, ${createdDate.year}",
+                  " ${monthMap[createdDate.month] ?? ""}, ${createdDate.year} | ${weekdayMap[createdDate.weekday]}",
                   style: Theme.of(context).textTheme.bodyMedium,
                 ),
 

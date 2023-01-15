@@ -24,9 +24,11 @@ class DiaryListEntry extends StatefulWidget {
 class _DiaryListEntryState extends State<DiaryListEntry> {
   @override
   Widget build(BuildContext context) {
-    String title = widget.diaryEntry.title ?? "";
+    String title = widget.diaryEntry.title;
     DateTime createdDate = widget.diaryEntry.createdDate;
-
+    // since body can contain many newlines and that shouldn't be showed in diary
+    // entry.
+    String body = widget.diaryEntry.body.replaceAll(RegExp(r"[\n ]+"), " ");
     return InkWell(
       onTap: () {
         Navigator.push(
@@ -44,31 +46,29 @@ class _DiaryListEntryState extends State<DiaryListEntry> {
       },
 
       child: Container(
-        padding: const EdgeInsets.all(7),
+        padding: const EdgeInsets.symmetric(vertical: 7),
         height: 100,
         child: Row(
           children: <Widget>[
             // date display
-            Container(
-              decoration: BoxDecoration(
-                border: Border(
-                  right: BorderSide(
-                    color: Theme.of(context).dividerColor,
-                    width: 2
-                  ),
-                )
-              ),
-              padding: const EdgeInsets.only(right: 7),
-              margin: const EdgeInsets.only(right: 7),
-
-              child: Expanded(
-                flex: 2,
+            Expanded(
+              flex: 2,
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 7),
+                decoration: BoxDecoration(
+                    border: Border(
+                      right: BorderSide(
+                          color: Theme.of(context).dividerColor,
+                          width: 2
+                      ),
+                    )
+                ),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: <Widget>[
                     Text(
-                      createdDate.day.toString().padLeft(2, '0'),
-                      style: Theme.of(context).textTheme.titleLarge
+                        createdDate.day.toString().padLeft(2, '0'),
+                        style: Theme.of(context).textTheme.titleLarge
                     ),
                     Text(
                       monthMap[createdDate.month] ?? "",
@@ -77,42 +77,44 @@ class _DiaryListEntryState extends State<DiaryListEntry> {
                       ),
                     ),
                     Text(
-                        createdDate.year.toString(),
-                        style: TextStyle(
+                      createdDate.year.toString(),
+                      style: TextStyle(
                           color: Theme.of(context).textTheme.bodySmall?.color
-                        ),
+                      ),
                     ),
                   ],
                 ),
               ),
             ),
 
-
             // display diary content
             Expanded(
               flex: 13,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  // diary title
-                  title.isNotEmpty ? Text(
-                    title,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.bold
-                    )
-                  ) : Container(height: 0,),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 7),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    // diary title
+                    title.isNotEmpty ? Text(
+                        title,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                            fontWeight: FontWeight.bold
+                        )
+                    ) : Container(height: 0,),
 
-                  // diary body
-                  Text(
-                    // TODO: Replace all new lines with white spaces
-                    widget.diaryEntry.body,
-                    maxLines: title.isNotEmpty ? 3 : 4,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(height: 1.3),
-                  ),
-                ],
+                    // diary body
+                    Text(
+                      // TODO: Replace all new lines with white spaces
+                      body,
+                      maxLines: title.isNotEmpty ? 3 : 4,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(height: 1.3),
+                    ),
+                  ],
+                ),
               )
             ),
           ],

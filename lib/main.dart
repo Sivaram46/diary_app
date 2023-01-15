@@ -23,6 +23,7 @@ void main({
 }) {
   // Set default password status and password
   String password = "0000";
+  WidgetsFlutterBinding.ensureInitialized();
   bool enabled = false;
   void setPasswordStatus(bool status) { enabled = status; }
   void setPassword(String pwd) { password = pwd; }

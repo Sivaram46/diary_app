@@ -77,8 +77,8 @@ class _DiaryEditState extends State<DiaryEdit> {
   void _saveDiaryEntry() {
     final newDiary = Diary(
       createdDate: selectedDate,
-      body: bodyText,
-      title: titleText,
+      body: bodyText.trim(),
+      title: titleText.trim(),
       mood: mood,
       id: widget.diaryEntry.id
     );
@@ -160,24 +160,17 @@ class _DiaryEditState extends State<DiaryEdit> {
                 icon: const Icon(Icons.done),
                 onPressed: () {
                   _saveDiaryEntry();
-                  widget.setIsEdit(false);
-                  // TODO: Think of any other way to avoid popping to diary list done creating a diary
-                  // Popping to diary list when creating an entry.
-                  if (widget.diaryEntry.body.isEmpty) {
-                    Navigator.pop(context);
-                  }
+                  Navigator.pop(context);
                 },
             ),
           ]
         ),
 
         body: Padding(
-          padding: const EdgeInsets.all(8),
+          padding: const EdgeInsets.all(7),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              //  add top bar here which will hold Save, Go back, Pin/Star buttons
-              // Container(),
-
               DateSelect(
                 createdDate: selectedDate,
                 isView: false,
@@ -187,45 +180,41 @@ class _DiaryEditState extends State<DiaryEdit> {
                 onEmojiTap: () {},
               ),
 
-              const Divider(),
+              const Divider(height: 7,),
 
               // Title text field
-              Container(
-                padding: const EdgeInsets.only(bottom: 3),
+               TextField(
+                controller: titleController,
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.bold
+                ),
+                decoration: const InputDecoration(
+                  isDense: true,
+                  contentPadding: EdgeInsets.all(0),
+                  border: InputBorder.none,
+                  hintText: "Title",
+                ),
+              ),
+
+              const SizedBox(height: 7,),
+
+              // Diary body text field
+              Expanded(
+                // maxLines: null,
                 child: TextField(
-                  controller: titleController,
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.bold
+                  controller: bodyController,
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      height: 1.3
                   ),
                   decoration: const InputDecoration(
                     isDense: true,
                     contentPadding: EdgeInsets.all(0),
                     border: InputBorder.none,
-                    hintText: "Title",
+                    hintText: "Write here..."
                   ),
+                  maxLines: null,
                 ),
               ),
-
-              // Diary body text field
-              Container(
-                padding: const EdgeInsets.only(top: 3),
-                child: Expanded(
-                  // maxLines: null,
-                  child: TextField(
-                    controller: bodyController,
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        height: 1.3
-                    ),
-                    decoration: const InputDecoration(
-                      isDense: true,
-                      contentPadding: EdgeInsets.all(0),
-                      border: InputBorder.none,
-                      hintText: "Write here..."
-                    ),
-                    maxLines: null,
-                  ),
-                ),
-              )
             ],
           ),
         ),
