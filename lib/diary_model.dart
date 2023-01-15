@@ -44,7 +44,7 @@ class Diary {
       ------------
       This is a brief summary...
 
-      - Diary App
+      - Memoir
 
     */
     String datePart = 'CREATED ON: '
@@ -56,7 +56,7 @@ class Diary {
     String result = "$datePart\n"
         "$titlePart${titlePart.isNotEmpty ? '\n' : ''}"
         "$body\n\n"
-        "- Diary App";
+        "- Memoir";
 
     return result;
   }

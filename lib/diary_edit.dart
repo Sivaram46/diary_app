@@ -128,7 +128,7 @@ class _DiaryEditState extends State<DiaryEdit> {
       onWillPop: (bodyText.isNotEmpty && bodyText != widget.diaryEntry.body) ? _showAlertDialog : null,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text("Diary App"),
+          title: const Text("Memoir"),
           leading: IconButton(
             icon: const Icon(Icons.close),
             // When cancel is pressed and if there are any text in state show dialog

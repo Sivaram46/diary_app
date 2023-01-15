@@ -43,7 +43,7 @@ class DiaryView extends StatelessWidget {
   Widget build(BuildContext context, [bool mounted=true]) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Diary App"),
+        title: const Text("Memoir"),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {

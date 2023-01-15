@@ -268,7 +268,7 @@ class _DiaryDrawerState extends State<DiaryDrawer> {
             height: 70,
             padding: const EdgeInsets.symmetric(horizontal: 15),
             child: const Text(
-              'Diary App',
+              'Memoir',
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
           ),

@@ -67,10 +67,10 @@ class _MyApp extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'Diary App',
+        title: "Memoir",
         theme: _isDark ? ThemeData.dark(useMaterial3: true) : ThemeData.light(useMaterial3: true),
         home: DiaryHomePage(
-          title: "Diary App",
+          title: "Memoir",
           theme: _isDark,
           setTheme: setTheme,
         ),
