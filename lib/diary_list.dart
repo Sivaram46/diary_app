@@ -107,7 +107,6 @@ class _DiaryListEntryState extends State<DiaryListEntry> {
 
                     // diary body
                     Text(
-                      // TODO: Replace all new lines with white spaces
                       body,
                       maxLines: title.isNotEmpty ? 3 : 4,
                       overflow: TextOverflow.ellipsis,
@@ -124,7 +123,6 @@ class _DiaryListEntryState extends State<DiaryListEntry> {
   }
 }
 
-// TODO: Bug - Warning when creating diary list
 class DiaryList extends StatefulWidget {
   const DiaryList({
     super.key,

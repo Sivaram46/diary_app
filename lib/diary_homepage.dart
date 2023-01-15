@@ -75,9 +75,11 @@ class _DiaryHomePageState extends State<DiaryHomePage> {
             title: Text(widget.title),
 
             actions: <Widget>[
+              // TODO: Feature - Favorite diary entry
               IconButton(
                   onPressed: () {}, icon: const Icon(Icons.favorite_outline)),
               // IconButton(onPressed: () {}, icon: const Icon(Icons.sell_outlined)),
+              // TODO: Feature - Search diary entries
               IconButton(onPressed: () {}, icon: const Icon(Icons.search)),
             ],
           ),

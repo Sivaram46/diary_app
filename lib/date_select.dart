@@ -15,7 +15,6 @@ class DateSelect extends StatelessWidget {
   final void Function()? onDateTap;
   final void Function()? onEmojiTap;
 
-  // TODO: Weekday in date select
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -46,6 +45,7 @@ class DateSelect extends StatelessWidget {
           ),
 
           // emoji select
+          // TODO: Feature - Mood selector
           const Icon(
             Icons.emoji_emotions,
             size: 30,

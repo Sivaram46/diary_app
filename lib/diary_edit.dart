@@ -83,7 +83,6 @@ class _DiaryEditState extends State<DiaryEdit> {
       id: widget.diaryEntry.id
     );
 
-    // TODO: Bug - old date is shown in diary view after update of new date
     widget.setDiaryEntry(newDiary);
 
     if (widget.diaryEntry.body.isNotEmpty) {
@@ -167,10 +166,12 @@ class _DiaryEditState extends State<DiaryEdit> {
         ),
 
         body: Padding(
-          padding: const EdgeInsets.all(7),
+          padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 7,),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
+
+              // TODO: Some more padding for date select, also for title and body
               DateSelect(
                 createdDate: selectedDate,
                 isView: false,
@@ -185,6 +186,7 @@ class _DiaryEditState extends State<DiaryEdit> {
               // Title text field
                TextField(
                 controller: titleController,
+                textCapitalization: TextCapitalization.sentences,
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.bold
                 ),
@@ -199,10 +201,12 @@ class _DiaryEditState extends State<DiaryEdit> {
               const SizedBox(height: 7,),
 
               // Diary body text field
+              // TODO: Body font size can be increased
               Expanded(
                 // maxLines: null,
                 child: TextField(
                   controller: bodyController,
+                  textCapitalization: TextCapitalization.sentences,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       height: 1.3
                   ),

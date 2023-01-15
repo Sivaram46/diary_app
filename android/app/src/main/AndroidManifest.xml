@@ -5,7 +5,7 @@
    <application
         android:label="Memoir"
         android:name="${applicationName}"
-        android:icon="@mipmap/memoir_launcher">
+        android:icon="@mipmap/memoir_edit">
         <activity
             android:name=".MainActivity"
             android:exported="true"
