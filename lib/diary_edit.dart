@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'dart:developer';
 
 import 'diary_model.dart';
 import 'date_select.dart';
+import 'diary_database.dart';
 
 class DiaryEdit extends StatefulWidget {
   const DiaryEdit({
@@ -24,9 +26,9 @@ class DiaryEdit extends StatefulWidget {
 }
 
 class _DiaryEditState extends State<DiaryEdit> {
-  String? titleText;
+  String titleText = "";
   String bodyText = "";
-  String? mood;
+  String mood = "";
   DateTime selectedDate = DateTime.now();
 
   final TextEditingController titleController = TextEditingController();
@@ -52,9 +54,9 @@ class _DiaryEditState extends State<DiaryEdit> {
     super.initState();
     // setting state variables
     setState(() {
-      titleText = widget.diaryEntry?.title;
+      titleText = widget.diaryEntry?.title ?? "";
       bodyText = widget.diaryEntry?.body ?? "";
-      mood = widget.diaryEntry?.mood;
+      mood = widget.diaryEntry?.mood ?? "";
       selectedDate = widget.diaryEntry?.createdDate ?? DateTime.now();
     });
 
@@ -76,7 +78,6 @@ class _DiaryEditState extends State<DiaryEdit> {
   void _saveDiaryEntry() {
     // Make a diary entry held by selectedDate, bodyText... and create/update
     // a new diary entry in `diaryEntries`.
-    // Returns the index of newly created or updated diary entry item in `diaryEntries`.
     final newDiary = Diary(
         createdDate: selectedDate,
         body: bodyText,
@@ -84,15 +85,17 @@ class _DiaryEditState extends State<DiaryEdit> {
         mood: mood
     );
 
-    if (widget.diaryEntry != null) {
-      widget.updateDiaryEntry(
-          widget.diaryEntry ?? Diary(createdDate: DateTime.now(), body: ""),
-          newDiary
-      );
-    }
-    else {
-      widget.addDiaryEntry(newDiary);
-    }
+    widget.addDiaryEntry(newDiary);
+
+    // if (widget.diaryEntry != null) {
+    //   widget.updateDiaryEntry(
+    //       widget.diaryEntry ?? Diary(createdDate: DateTime.now(), body: ""),
+    //       newDiary
+    //   );
+    // }
+    // else {
+    //   widget.addDiaryEntry(newDiary);
+    // }
   }
 
   Future<bool> _showAlertDialog() async {
@@ -136,7 +139,7 @@ class _DiaryEditState extends State<DiaryEdit> {
             // or else don't show alert dialog, just pop to the home page.
             onPressed:
               // Condition to show alert dialog
-              (bodyText.isNotEmpty && bodyText != widget.diaryEntry?.body)?
+              (bodyText.isNotEmpty && bodyText != widget.diaryEntry?.body) ?
               () async {
                 final discarded = await _showAlertDialog();
                 // This is to avoid using context in async tasks. (Referred SO)
@@ -163,6 +166,7 @@ class _DiaryEditState extends State<DiaryEdit> {
                   _saveDiaryEntry();
                   widget.setIsEdit(false);
                   // TODO: Think of any other way to avoid popping to diary list done creating a diary
+                  // Popping to diary list when creating an entry.
                   if (widget.diaryEntry == null) {
                     Navigator.pop(context);
                   }

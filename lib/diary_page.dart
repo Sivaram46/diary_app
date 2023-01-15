@@ -54,7 +54,7 @@ class _DiaryPageState extends State<DiaryPage> {
         setIsEdit: setIsEdit,
       ) :
       DiaryView(
-        diaryEntry: widget.diaryEntry ?? Diary(createdDate: DateTime.now(), body: ""),
+        diaryEntry: widget.diaryEntry ?? Diary(createdDate: DateTime.now()),
         updateDiaryEntry: widget.updateDiaryEntry,
         addDiaryEntry: widget.addDiaryEntry,
         deleteDiaryEntry: widget.deleteDiaryEntry,

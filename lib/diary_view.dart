@@ -1,6 +1,5 @@
 import 'package:diary_app/diary_share.dart';
 import 'package:flutter/material.dart';
-import 'package:share_plus/share_plus.dart';
 
  import 'diary_model.dart';
  import 'date_select.dart';
@@ -96,11 +95,12 @@ class DiaryView extends StatelessWidget {
 
             const Divider(),
 
-            (diaryEntry.title != null && diaryEntry.title!.isNotEmpty) ?
+            // Show title only when it is not empty
+            (diaryEntry.title.isNotEmpty) ?
             Container(
               padding: const EdgeInsets.only(bottom: 3),
               child: Text(
-                diaryEntry.title ?? "",
+                diaryEntry.title,
                 style: Theme.of(context).textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.bold
                 ),
@@ -123,7 +123,6 @@ class DiaryView extends StatelessWidget {
                 ),
               ),
             ),
-
           ],
         ),
       ),

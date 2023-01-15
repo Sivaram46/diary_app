@@ -15,6 +15,7 @@ class DateSelect extends StatelessWidget {
   final void Function()? onDateTap;
   final void Function()? onEmojiTap;
 
+  // TODO: Weekday in date select
   @override
   Widget build(BuildContext context) {
     return SizedBox(
