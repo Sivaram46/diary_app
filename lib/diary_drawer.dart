@@ -202,7 +202,6 @@ class _DiaryDrawerState extends State<DiaryDrawer> {
 
           const Divider(),
 
-          // TODO: Feature to change theme of app
           ListTile(
             leading: widget.theme
                 ? const Icon(Icons.dark_mode)

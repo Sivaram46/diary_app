@@ -8,16 +8,12 @@ class DiaryView extends StatelessWidget {
   const DiaryView({
     super.key,
     required this.diaryEntry,
-    required this.addDiaryEntry,
-    required this.updateDiaryEntry,
     required this.deleteDiaryEntry,
     required this.setIsEdit,
   });
 
   final Diary diaryEntry;
-  final void Function(Diary) addDiaryEntry;
   final void Function(Diary) deleteDiaryEntry;
-  final void Function(Diary, Diary) updateDiaryEntry;
   final void Function(bool) setIsEdit;
 
   Future<bool> _showAlertDialog(BuildContext parentContext) async {
@@ -80,7 +76,6 @@ class DiaryView extends StatelessWidget {
         ],
       ),
 
-      // TODO: Bug - First diary element is unable to edit.
       body: Container(
         padding: const EdgeInsets.all(8),
         child: Column(

@@ -6,17 +6,17 @@ import 'diary_edit.dart';
 class DiaryPage extends StatefulWidget {
   const DiaryPage({
     super.key,
-    this.diaryEntry,
+    required this.diaryEntry,
     required this.updateDiaryEntry,
     required this.addDiaryEntry,
     required this.deleteDiaryEntry,
     required this.isEdit,
   });
 
-  final Diary? diaryEntry;
+  final Diary diaryEntry;
   final void Function(Diary) addDiaryEntry;
   final void Function(Diary) deleteDiaryEntry;
-  final void Function(Diary, Diary) updateDiaryEntry;
+  final void Function(Diary) updateDiaryEntry;
   final bool isEdit;
 
   @override
@@ -26,18 +26,24 @@ class DiaryPage extends StatefulWidget {
 class _DiaryPageState extends State<DiaryPage> {
 
   bool isEdit = false;
+  Diary diary = Diary(createdDate: DateTime.now());
 
   @override
   void initState() {
     super.initState();
-    setState(() {
-      isEdit = widget.isEdit;
-    });
+    isEdit = widget.isEdit;
+    diary = widget.diaryEntry;
   }
 
   void setIsEdit(bool newIsEdit) {
     setState(() {
       isEdit = newIsEdit;
+    });
+  }
+
+  void setDiaryEntry(Diary newDiaryEntry) {
+    setState(() {
+      diary = newDiaryEntry;
     });
   }
 
@@ -50,13 +56,11 @@ class _DiaryPageState extends State<DiaryPage> {
         diaryEntry: widget.diaryEntry,
         updateDiaryEntry: widget.updateDiaryEntry,
         addDiaryEntry: widget.addDiaryEntry,
-        deleteDiaryEntry: widget.deleteDiaryEntry,
         setIsEdit: setIsEdit,
+        setDiaryEntry: setDiaryEntry,
       ) :
       DiaryView(
-        diaryEntry: widget.diaryEntry ?? Diary(createdDate: DateTime.now()),
-        updateDiaryEntry: widget.updateDiaryEntry,
-        addDiaryEntry: widget.addDiaryEntry,
+        diaryEntry: widget.diaryEntry,
         deleteDiaryEntry: widget.deleteDiaryEntry,
         setIsEdit: setIsEdit,
       );

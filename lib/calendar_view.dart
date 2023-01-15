@@ -16,7 +16,7 @@ class CalendarView extends StatefulWidget {
   final List<Diary> diaryEntries;
   final void Function(Diary) addDiaryEntry;
   final void Function(Diary) deleteDiaryEntry;
-  final void Function(Diary, Diary) updateDiaryEntry;
+  final void Function(Diary) updateDiaryEntry;
 
   @override
   State<CalendarView> createState() => _CalendarViewState();

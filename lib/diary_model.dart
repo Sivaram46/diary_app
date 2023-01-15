@@ -5,19 +5,22 @@ class Diary {
   String title;
   String body;
   String mood;
+  int id;
 
   Diary({
     required this.createdDate,
     this.body = "",
     this.title = "",
     this.mood = "",
+    this.id = 0,
   });
 
   Diary.fromJSON(Map<String, dynamic> diaryMap)
       : createdDate = DateTime.parse(diaryMap['created_date']),
         title = diaryMap['title'],
         body = diaryMap['body'],
-        mood = diaryMap['mood'];
+        mood = diaryMap['mood'],
+        id = diaryMap['id'];
 
   static String toJSONString(Diary diary) => jsonEncode({
         'created_date': diary.createdDate.toString(),
