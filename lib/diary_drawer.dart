@@ -1,7 +1,13 @@
+import 'dart:io';
+
+import 'package:diary_app/diary_database.dart';
 import 'package:diary_app/diary_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:file_picker/file_picker.dart';
 
 import 'constants.dart';
 
@@ -166,19 +172,86 @@ class _DiaryDrawerState extends State<DiaryDrawer> {
   }
 
   Future<void> _importExport(BuildContext parentContext) async {
-    return await showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text("Import Export"),
-          content: Column(
-            children: <Widget>[
-               Text("export"),
-               Text("Import"),
-            ],
-          ),
-        );
-      },
+    await showDialog<bool>(
+      context: parentContext,
+      builder: (BuildContext context) => AlertDialog(
+        title: const Text('Import/Export Diary Entries'),
+        content: FutureBuilder<List<Diary>>(
+          future: getDiariesFromDB(),
+          builder: (context, snapshot) {
+            // TODO: Better UI for import and exporting
+            return Column(
+              children: <Widget>[
+                // Export functionality
+                ElevatedButton(
+                    onPressed: () async {
+                      var status = await Permission.storage.status;
+                      // If permission not granted, request it.
+                      if (!status.isGranted) {
+                        await Permission.storage.request();
+                      }
+                      else {
+                        // TODO: use external_path library to get correct paths
+                        if (Platform.isAndroid && snapshot.hasData) {
+                          final diaryEntries = snapshot.data ?? [];
+                          String fileName = DateTime.now().toString().split(".")[0];
+                          fileName = fileName.replaceAll(" ", "--").replaceAll(":", "-");
+                          fileName = "/storage/emulated/0/Download/Memoir-$fileName.txt";
+
+                          final backupFile = File(fileName);
+
+                          String result = "";
+                          for (final entry in diaryEntries) {
+                            result += "${entry.toCSVLine()}\n";
+                          }
+                          backupFile.writeAsString(result);
+                        }
+                      }
+                    },
+                    child: const Text("Export")
+                ),
+
+                // Import functionality
+                ElevatedButton(
+                    onPressed: () async {
+                      var status = await Permission.storage.status;
+                      // If permission not granted, request it.
+                      if (!status.isGranted) {
+                        await Permission.storage.request();
+                      }
+                      else {
+                        FilePickerResult? result = await FilePicker.platform.pickFiles(
+                          dialogTitle:  "Pick a file to import. "
+                                        "Filename in the form of Memoir-<timestamp>.csv. "
+                                        "By importing, ALL existing data would be LOST",
+                          type: FileType.custom,
+                          allowedExtensions: ["txt"],
+                        );
+                        if (result != null) {
+                          // Read diary contents from backup file
+                          // TODO: File name format check
+                          String path = result.files.first.path ?? "";
+                          if (path.isNotEmpty) {
+                            File backupFile = File(path);
+                            List<String> contents = await backupFile.readAsLines();
+                            List<Diary> diaryEntries = contents.map(
+                              (e) => Diary.fromCSVLine(e)
+                            ).toList();
+
+                            // Wipe out existing data and write to database
+                            wipeAndInsertIntoDB(diaryEntries);
+                            setState(() {});
+                          }
+                        }
+                      }
+                    },
+                    child: const Text("Import")
+                ),
+              ],
+            );
+          },
+        ),
+      ),
     );
   }
 
@@ -236,11 +309,12 @@ class _DiaryDrawerState extends State<DiaryDrawer> {
           ),
           const Divider(),
 
-          // TODO: Feature to import and export diary entries
           ListTile(
             leading: const Icon(Icons.import_export),
             title: const Text("Export/Import Entries"),
-            onTap: () {},
+            onTap: () {
+              _importExport(context);
+            },
           ),
         ],
       ),

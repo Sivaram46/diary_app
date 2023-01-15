@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_app_lock/flutter_app_lock.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import 'diary_homepage.dart';
 import 'lock_screen.dart';

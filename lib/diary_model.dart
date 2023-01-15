@@ -2,10 +2,10 @@ import 'dart:convert';
 
 class Diary {
   DateTime createdDate;
-  String title;
-  String body;
-  String mood;
-  int id;
+  String title = "";
+  String body = "";
+  String mood = "";
+  int id = 0;
 
   Diary({
     required this.createdDate,
@@ -21,13 +21,6 @@ class Diary {
         body = diaryMap['body'],
         mood = diaryMap['mood'],
         id = diaryMap['id'];
-
-  static String toJSONString(Diary diary) => jsonEncode({
-        'created_date': diary.createdDate.toString(),
-        'title': diary.title,
-        'body': diary.body,
-        'mood': diary.mood,
-      });
 
   Map<String, dynamic> toMap() {
     return {
@@ -66,6 +59,19 @@ class Diary {
         "- Diary App";
 
     return result;
+  }
+
+  String toCSVLine() {
+    return '"${createdDate.toString()}","$title","$body","$mood"';
+  }
+
+  Diary.fromCSVLine(String line)
+  : createdDate = DateTime.now() {
+    final entries = line.trim().split(",").map((e) => e.substring(1, e.length - 1)).toList();
+    createdDate = DateTime.parse(entries[0]);
+    title = entries[1];
+    body = entries[2];
+    mood = entries[3];
   }
 
   @override
