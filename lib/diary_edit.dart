@@ -1,25 +1,24 @@
 import 'package:flutter/material.dart';
-import 'dart:developer';
+import 'package:sqflite/sqflite_dev.dart';
 
 import 'diary_model.dart';
 import 'date_select.dart';
-import 'diary_database.dart';
 
 class DiaryEdit extends StatefulWidget {
   const DiaryEdit({
     super.key,
-    this.diaryEntry,
+    required this.diaryEntry,
     required this.addDiaryEntry,
     required this.updateDiaryEntry,
-    required this.deleteDiaryEntry,
     required this.setIsEdit,
+    required this.setDiaryEntry,
   });
 
-  final Diary? diaryEntry;
+  final Diary diaryEntry;
   final void Function(Diary) addDiaryEntry;
-  final void Function(Diary) deleteDiaryEntry;
-  final void Function(Diary, Diary) updateDiaryEntry;
+  final void Function(Diary) updateDiaryEntry;
   final void Function(bool) setIsEdit;
+  final void Function(Diary) setDiaryEntry;
 
   @override
   State<DiaryEdit> createState() => _DiaryEditState();
@@ -54,20 +53,20 @@ class _DiaryEditState extends State<DiaryEdit> {
     super.initState();
     // setting state variables
     setState(() {
-      titleText = widget.diaryEntry?.title ?? "";
-      bodyText = widget.diaryEntry?.body ?? "";
-      mood = widget.diaryEntry?.mood ?? "";
-      selectedDate = widget.diaryEntry?.createdDate ?? DateTime.now();
+      titleText = widget.diaryEntry.title;
+      bodyText = widget.diaryEntry.body;
+      mood = widget.diaryEntry.mood;
+      selectedDate = widget.diaryEntry.createdDate;
     });
 
-    titleController.text = widget.diaryEntry?.title ?? "";
+    titleController.text = widget.diaryEntry.title;
     titleController.addListener(() {
       setState(() {
         titleText = titleController.text;
       });
     });
 
-    bodyController.text = widget.diaryEntry?.body ?? "";
+    bodyController.text = widget.diaryEntry.body;
     bodyController.addListener(() {
       setState(() {
         bodyText = bodyController.text;
@@ -76,26 +75,23 @@ class _DiaryEditState extends State<DiaryEdit> {
   }
 
   void _saveDiaryEntry() {
-    // Make a diary entry held by selectedDate, bodyText... and create/update
-    // a new diary entry in `diaryEntries`.
     final newDiary = Diary(
-        createdDate: selectedDate,
-        body: bodyText,
-        title: titleText,
-        mood: mood
+      createdDate: selectedDate,
+      body: bodyText,
+      title: titleText,
+      mood: mood,
+      id: widget.diaryEntry.id
     );
 
-    widget.addDiaryEntry(newDiary);
+    // TODO: Bug - old date is shown in diary view after update of new date
+    widget.setDiaryEntry(newDiary);
 
-    // if (widget.diaryEntry != null) {
-    //   widget.updateDiaryEntry(
-    //       widget.diaryEntry ?? Diary(createdDate: DateTime.now(), body: ""),
-    //       newDiary
-    //   );
-    // }
-    // else {
-    //   widget.addDiaryEntry(newDiary);
-    // }
+    if (widget.diaryEntry.body.isNotEmpty) {
+      widget.updateDiaryEntry(newDiary);
+    }
+    else {
+      widget.addDiaryEntry(newDiary);
+    }
   }
 
   Future<bool> _showAlertDialog() async {
@@ -129,7 +125,7 @@ class _DiaryEditState extends State<DiaryEdit> {
     // WillPopScope is to show alert message even when pressing back button while
     // editing diary.
     return WillPopScope(
-      onWillPop: _showAlertDialog,
+      onWillPop: (bodyText.isNotEmpty && bodyText != widget.diaryEntry.body) ? _showAlertDialog : null,
       child: Scaffold(
         appBar: AppBar(
           title: const Text("Diary App"),
@@ -139,7 +135,7 @@ class _DiaryEditState extends State<DiaryEdit> {
             // or else don't show alert dialog, just pop to the home page.
             onPressed:
               // Condition to show alert dialog
-              (bodyText.isNotEmpty && bodyText != widget.diaryEntry?.body) ?
+              (bodyText.isNotEmpty && bodyText != widget.diaryEntry.body) ?
               () async {
                 final discarded = await _showAlertDialog();
                 // This is to avoid using context in async tasks. (Referred SO)
@@ -149,7 +145,7 @@ class _DiaryEditState extends State<DiaryEdit> {
                   // return to home page when creating a diary. Otherwise return to
                   // diary view by setting up isEdit false.
                   // TODO: Bug - Keyboard pop up and down when navigator is popped
-                  if (widget.diaryEntry == null) {
+                  if (widget.diaryEntry.body.isEmpty) {
                     Navigator.pop(context); // popping from dialog
                   }
                   else {
@@ -167,7 +163,7 @@ class _DiaryEditState extends State<DiaryEdit> {
                   widget.setIsEdit(false);
                   // TODO: Think of any other way to avoid popping to diary list done creating a diary
                   // Popping to diary list when creating an entry.
-                  if (widget.diaryEntry == null) {
+                  if (widget.diaryEntry.body.isEmpty) {
                     Navigator.pop(context);
                   }
                 },

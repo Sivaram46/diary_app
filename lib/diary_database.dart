@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
 import 'diary_model.dart';
@@ -28,40 +27,56 @@ Future<Database> createDatabase() async {
         """
       );
       final sampleDiary = Diary(
-          createdDate: DateTime(2023, 1, 1),
+        createdDate: DateTime(2023, 1, 1),
         title: "Sample diary entry",
         body: "This is just a sample entry created",
         mood: "Happy"
       );
       // create a sample data
       await db.insert(
-        'diary_entries',
+        "diary_entries",
         sampleDiary.toMap()
       );
-      // await db.execute(
-      //   """
-      //   INSERT INTO diary_entries(
-      //     title, body, created_date, mood
-      //   ) VALUES(
-      //     'Sample diary entry', 'This is just a sample entry created', '2023-01-01 00:00:00.000', 'Happy'
-      //   )
-      //   """
-      // );
     }
   );
 
   return database;
 }
 
-Future<void> insertDiaryEntry(Diary diaryEntry) async {
+Future<void> insertDiaryIntoDB(Diary diaryEntry) async {
   Database db = await createDatabase();
-  await db.insert('diary_entries', diaryEntry.toMap());
+  await db.insert("diary_entries", diaryEntry.toMap());
   db.close();
 }
 
-Future<List<Diary>> getDiaryEntries() async {
+
+Future<void> updateDiaryDB(Diary diaryEntry) async {
   Database db = await createDatabase();
-  List<Map<String, dynamic>> rows = await db.query('diary_entries');
+  await db.update(
+    "diary_entries",
+    diaryEntry.toMap(),
+    where: "id = ?",
+    whereArgs: [diaryEntry.id]
+  );
+  db.close();
+}
+
+Future<void> removeDiaryFromDB(int id) async {
+  Database db = await createDatabase();
+  await db.delete(
+    "diary_entries",
+    where: "id = ?",
+    whereArgs: [id]
+  );
+  db.close();
+}
+
+Future<List<Diary>> getDiariesFromDB() async {
+  Database db = await createDatabase();
+  List<Map<String, dynamic>> rows = await db.query(
+    "diary_entries",
+    orderBy: "created_date DESC",
+  );
   List<Diary> entries = rows.map((row) => Diary.fromJSON(row)).toList();
   db.close();
 

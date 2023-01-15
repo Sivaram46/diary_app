@@ -32,69 +32,18 @@ class _DiaryHomePageState extends State<DiaryHomePage> {
   // Function to set diary entries. Possible modes are append, delete and update.
   // Then it will sort the diary entries by createdDate and write it to disk.
   void addDiaryEntry(Diary newDiary) {
-    // setState(() {
-    //   diaryEntries.add(newDiary);
-    //   // sort the entries by date of creation (in descending order)
-    //   diaryEntries.sort((a, b) => b.createdDate.compareTo(a.createdDate));
-    // });
-    // _writeDiaryEntries();
-    insertDiaryEntry(newDiary);
-    setState(() {
-
-    });
-  }
-
-  void updateDiaryEntry(Diary oldDiary, Diary newDiary) {
-    setState(() {
-      int index = diaryEntries.indexOf(oldDiary);
-      if (index > 0) {
-        diaryEntries[index].createdDate = newDiary.createdDate;
-        diaryEntries[index].body = newDiary.body;
-        diaryEntries[index].title = newDiary.title;
-        diaryEntries[index].mood = newDiary.mood;
-      }
-      diaryEntries.sort((a, b) => b.createdDate.compareTo(a.createdDate));
-    });
-    _writeDiaryEntries();
-  }
-
-  void deleteDiaryEntry(Diary toDelete) {
-    setState(() {
-      diaryEntries.remove(toDelete);
-    });
-    _writeDiaryEntries();
-  }
-
-  // Load SharedPreferences in homepage and load all (or some) list entries to the state.
-  // TODO: Read/write from Sqlite db
-  void _readDiaryEntries() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    List<String>? jsonEntries = prefs.getStringList("diaryEntries");
-
-    if (jsonEntries != null) {
-      for (var jsonEntry in jsonEntries) {
-        diaryEntries.add(Diary.fromJSON(jsonDecode(jsonEntry)));
-      }
-    }
-
-    /*
-    var tempJsonEntries = getDiaryData();
-    await prefs.setStringList("diaryEntries", tempJsonEntries);
-    for (var jsonEntry in tempJsonEntries) {
-      diaryEntries.add(Diary.fromJSON(jsonDecode(jsonEntry)));
-    }
-    */
-
-    // state is set-up up reflect the changes in diary entries
+    insertDiaryIntoDB(newDiary);
     setState(() {});
   }
 
-  Future<void> _writeDiaryEntries() async {
-    // converting list to json strings to write
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    final jsonEntries =
-    diaryEntries.map((diary) => Diary.toJSONString(diary)).toList();
-    await prefs.setStringList("diaryEntries", jsonEntries);
+  void updateDiaryEntry(Diary updatedEntry) {
+    updateDiaryDB(updatedEntry);
+    setState(() {});
+  }
+
+  void deleteDiaryEntry(Diary toDelete) {
+    removeDiaryFromDB(toDelete.id);
+    setState(() {});
   }
 
   @override
@@ -119,7 +68,7 @@ class _DiaryHomePageState extends State<DiaryHomePage> {
   Widget build(BuildContext context) {
     // Used future builder in the list of diary entries future returned by the database
     return FutureBuilder<List<Diary>>(
-      future: getDiaryEntries(),
+      future: getDiariesFromDB(),
       builder: (context, snapshot) {
         return Scaffold(
           appBar: AppBar(
@@ -167,6 +116,7 @@ class _DiaryHomePageState extends State<DiaryHomePage> {
                     addDiaryEntry: addDiaryEntry,
                     deleteDiaryEntry: deleteDiaryEntry,
                     isEdit: true,
+                    diaryEntry: Diary(createdDate: DateTime.now()),
                   ),
                 ),
               );

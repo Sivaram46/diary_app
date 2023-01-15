@@ -5,7 +5,7 @@ import 'package:flutter_app_lock/flutter_app_lock.dart';
 import 'diary_homepage.dart';
 import 'lock_screen.dart';
 
-// TODO: Bug - Read from shared prefs not working
+// TODO: Bug - Read password from shared prefs not working
 void readPasswordPrefs(
   void Function(bool) setPasswordStatus,
   void Function(String) setPassword
@@ -22,7 +22,7 @@ void main({
 }) {
   // Set default password status and password
   String password = "0000";
-  bool enabled = true;
+  bool enabled = false;
   void setPasswordStatus(bool status) { enabled = status; }
   void setPassword(String pwd) { password = pwd; }
   // Read it from disk

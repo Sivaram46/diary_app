@@ -15,7 +15,7 @@ class DiaryListEntry extends StatefulWidget {
   final Diary diaryEntry;
   final void Function(Diary) addDiaryEntry;
   final void Function(Diary) deleteDiaryEntry;
-  final void Function(Diary, Diary) updateDiaryEntry;
+  final void Function(Diary) updateDiaryEntry;
 
   @override
   State<DiaryListEntry> createState() => _DiaryListEntryState();
@@ -135,7 +135,7 @@ class DiaryList extends StatefulWidget {
   final List<Diary> diaryEntries;
   final void Function(Diary) addDiaryEntry;
   final void Function(Diary) deleteDiaryEntry;
-  final void Function(Diary, Diary) updateDiaryEntry;
+  final void Function(Diary) updateDiaryEntry;
 
   @override
   State<DiaryList> createState() => _DiaryListState();
