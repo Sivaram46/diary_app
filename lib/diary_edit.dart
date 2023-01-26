@@ -3,6 +3,7 @@ import 'package:sqflite/sqflite_dev.dart';
 
 import 'diary_model.dart';
 import 'date_select.dart';
+import 'constants.dart' show diaryViewPadding;
 
 class DiaryEdit extends StatefulWidget {
   const DiaryEdit({
@@ -166,12 +167,11 @@ class _DiaryEditState extends State<DiaryEdit> {
         ),
 
         body: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 7,),
+          padding: const EdgeInsets.all(diaryViewPadding,),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
 
-              // TODO: Some more padding for date select, also for title and body
               DateSelect(
                 createdDate: selectedDate,
                 isView: false,
@@ -181,13 +181,13 @@ class _DiaryEditState extends State<DiaryEdit> {
                 onEmojiTap: () {},
               ),
 
-              const Divider(height: 7,),
+              const Divider(height: diaryViewPadding,),
 
               // Title text field
                TextField(
                 controller: titleController,
                 textCapitalization: TextCapitalization.sentences,
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                     fontWeight: FontWeight.bold
                 ),
                 decoration: const InputDecoration(
@@ -198,7 +198,7 @@ class _DiaryEditState extends State<DiaryEdit> {
                 ),
               ),
 
-              const SizedBox(height: 7,),
+              const SizedBox(height: diaryViewPadding/2,),
 
               // Diary body text field
               // TODO: Body font size can be increased
@@ -207,7 +207,7 @@ class _DiaryEditState extends State<DiaryEdit> {
                 child: TextField(
                   controller: bodyController,
                   textCapitalization: TextCapitalization.sentences,
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                       height: 1.3
                   ),
                   decoration: const InputDecoration(

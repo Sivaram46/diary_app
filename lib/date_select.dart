@@ -36,7 +36,7 @@ class DateSelect extends StatelessWidget {
 
                 Text(
                   " ${monthMap[createdDate.month] ?? ""}, ${createdDate.year} | ${weekdayMap[createdDate.weekday]}",
-                  style: Theme.of(context).textTheme.bodyMedium,
+                  style: Theme.of(context).textTheme.bodyLarge,
                 ),
 
                 !isView ? const Icon(Icons.arrow_drop_down) : Container(height: 0,),

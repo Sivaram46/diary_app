@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+
 import 'diary_model.dart';
 import 'constants.dart';
 import 'diary_page.dart';
+import 'constants.dart' show diaryViewPadding;
 
 class DiaryListEntry extends StatefulWidget {
   const DiaryListEntry({
@@ -46,15 +48,15 @@ class _DiaryListEntryState extends State<DiaryListEntry> {
       },
 
       child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 7),
-        height: 100,
+        padding: const EdgeInsets.symmetric(vertical: diaryViewPadding),
+        height: 111,
         child: Row(
           children: <Widget>[
             // date display
             Expanded(
               flex: 2,
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 7),
+                padding: const EdgeInsets.symmetric(horizontal: 8),
                 decoration: BoxDecoration(
                     border: Border(
                       right: BorderSide(
@@ -91,7 +93,7 @@ class _DiaryListEntryState extends State<DiaryListEntry> {
             Expanded(
               flex: 13,
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 7),
+                padding: const EdgeInsets.symmetric(horizontal: 8),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
@@ -100,7 +102,7 @@ class _DiaryListEntryState extends State<DiaryListEntry> {
                         title,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                             fontWeight: FontWeight.bold
                         )
                     ) : Container(height: 0,),
@@ -110,7 +112,9 @@ class _DiaryListEntryState extends State<DiaryListEntry> {
                       body,
                       maxLines: title.isNotEmpty ? 3 : 4,
                       overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(height: 1.3),
+                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                          height: 1.3,
+                      ),
                     ),
                   ],
                 ),

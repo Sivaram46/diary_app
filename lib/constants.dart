@@ -33,3 +33,5 @@ final Map<int, String> weekdayMap = {
   6 : 'Saturday',
   7 : 'Sunday',
 };
+
+const diaryViewPadding = 12.0;

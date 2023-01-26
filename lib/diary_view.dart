@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
  import 'diary_model.dart';
  import 'date_select.dart';
+ import 'constants.dart' show diaryViewPadding;
 
 class DiaryView extends StatelessWidget {
   const DiaryView({
@@ -77,7 +78,7 @@ class DiaryView extends StatelessWidget {
       ),
 
       body: Padding(
-        padding: const EdgeInsets.all(7),
+        padding: const EdgeInsets.all(diaryViewPadding),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
@@ -88,27 +89,27 @@ class DiaryView extends StatelessWidget {
               onEmojiTap: () {},
             ),
 
-            const Divider(height: 7,),
+            const Divider(height: diaryViewPadding,),
 
             // Show title only when it is not empty
             diaryEntry.title.isNotEmpty
             ? Text(
                 diaryEntry.title,
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                     fontWeight: FontWeight.bold
                 ),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ) : Container(height: 0,),
 
-            const SizedBox(height: 7,),
+            const SizedBox(height: diaryViewPadding/2,),
 
             Expanded(
               child: SingleChildScrollView(
                 child: Text(
                   diaryEntry.body,
                   overflow: TextOverflow.visible,
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                     height: 1.3
                   ),
                 ),
