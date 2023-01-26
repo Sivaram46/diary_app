@@ -28,6 +28,13 @@ class DiaryHomePage extends StatefulWidget {
 class _DiaryHomePageState extends State<DiaryHomePage> {
   List<Diary> diaryEntries = [];
   int bottomItem = 0;
+  DateTime selectedDateCalendar = DateTime.now();
+
+  void setSelectedDateCalendar(DateTime date) {
+    setState(() {
+      selectedDateCalendar = date;
+    });
+  }
 
   // Function to set diary entries. Possible modes are append, delete and update.
   // Then it will sort the diary entries by createdDate and write it to disk.
@@ -105,6 +112,7 @@ class _DiaryHomePageState extends State<DiaryHomePage> {
               updateDiaryEntry: updateDiaryEntry,
               addDiaryEntry: addDiaryEntry,
               deleteDiaryEntry: deleteDiaryEntry,
+              setSelectedDateCalendar: setSelectedDateCalendar,
             ),
           ].elementAt(bottomItem),
 
@@ -118,7 +126,7 @@ class _DiaryHomePageState extends State<DiaryHomePage> {
                     addDiaryEntry: addDiaryEntry,
                     deleteDiaryEntry: deleteDiaryEntry,
                     isEdit: true,
-                    diaryEntry: Diary(createdDate: DateTime.now()),
+                    diaryEntry: Diary(createdDate: selectedDateCalendar),
                   ),
                 ),
               );

@@ -11,12 +11,14 @@ class CalendarView extends StatefulWidget {
     required this.updateDiaryEntry,
     required this.addDiaryEntry,
     required this.deleteDiaryEntry,
+    required this.setSelectedDateCalendar,
   });
 
   final List<Diary> diaryEntries;
   final void Function(Diary) addDiaryEntry;
   final void Function(Diary) deleteDiaryEntry;
   final void Function(Diary) updateDiaryEntry;
+  final void Function(DateTime) setSelectedDateCalendar;
 
   @override
   State<CalendarView> createState() => _CalendarViewState();
@@ -64,13 +66,13 @@ class _CalendarViewState extends State<CalendarView> {
         _focusedDay = focusedDay;
       });
 
+      widget.setSelectedDateCalendar(_selectedDay ?? DateTime.now());
+
       _selectedEntries.value = _getEntriesForDay(selectedDay);
     }
   }
 
-  // TODO: Pass the selected value in calendar when creating new diary entry
   // TODO: Bug - when diary entry is date changed, it still shows in old date
-  // TODO: Bug - adapt to dark theme in calendar
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -84,10 +86,19 @@ class _CalendarViewState extends State<CalendarView> {
             calendarFormat: _calendarFormat,
             eventLoader: _getEntriesForDay,
             startingDayOfWeek: StartingDayOfWeek.monday,
-            calendarStyle: const CalendarStyle(
-              // Use `CalendarStyle` to customize the UI
+
+            calendarStyle: CalendarStyle(
               outsideDaysVisible: true,
+              markerDecoration:  BoxDecoration(
+                color: Theme.of(context).colorScheme.primary,
+                shape: BoxShape.circle,
+                border: Border.all(color: Colors.black)
+              ),
+              weekendTextStyle: TextStyle(
+                  color: Theme.of(context).textTheme.bodySmall?.color
+              ),
             ),
+
             onDaySelected: _onDaySelected,
             // onRangeSelected: _onRangeSelected,
             onFormatChanged: (format) {
@@ -101,7 +112,7 @@ class _CalendarViewState extends State<CalendarView> {
               _focusedDay = focusedDay;
             },
           ),
-          const SizedBox(height: 8.0),
+          const SizedBox(height: 12),
           Expanded(
             child: ValueListenableBuilder<List<Diary>>(
               valueListenable: _selectedEntries,
