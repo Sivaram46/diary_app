@@ -3,22 +3,32 @@ import 'dart:io';
 import 'package:diary_app/diary_database.dart';
 import 'package:diary_app/diary_model.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:file_picker/file_picker.dart';
 
+import 'set_password.dart';
 import 'constants.dart';
 
 class DiaryDrawer extends StatefulWidget {
   const DiaryDrawer({
     super.key,
+    required this.password,
+    required this.isLock,
     required this.theme,
+    required this.isLockFirstTime,
+    required this.setPassword,
+    required this.setIsLock,
     required this.setTheme,
   });
 
+  final String password;
+  final bool isLock;
   final bool theme;
+  final bool isLockFirstTime;
   final void Function(bool) setTheme;
+  final void Function(bool) setIsLock;
+  final void Function(String) setPassword;
 
   @override
   State<DiaryDrawer> createState() => _DiaryDrawerState();
@@ -61,6 +71,7 @@ class _DiaryDrawerState extends State<DiaryDrawer> {
   }
 
   // TODO: Refine password setting logic
+  /*
   Future<void> _setPassword(BuildContext parentContext) async {
     return await showDialog<void>(
       context: parentContext,
@@ -170,6 +181,7 @@ class _DiaryDrawerState extends State<DiaryDrawer> {
       },
     );
   }
+   */
 
   Future<void> _importExport(BuildContext parentContext) async {
     await showDialog<bool>(
@@ -338,7 +350,13 @@ class _DiaryDrawerState extends State<DiaryDrawer> {
                 _isLock ? const Icon(Icons.lock) : const Icon(Icons.lock_open),
             title: const Text('App Lock'),
             onTap: () {
-              _setPassword(context);
+              Navigator.push(context, MaterialPageRoute(builder: (context) => SetPassword(
+                password: widget.password,
+                isLock: widget.isLock,
+                isLockFirstTime: widget.isLockFirstTime,
+                setPassword: widget.setPassword,
+                setIsLock: widget.setIsLock,
+              )));
             },
           ),
           const Divider(),

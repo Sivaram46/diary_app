@@ -2,6 +2,13 @@
 
 A Diary Application to keep track of everyday diary entries
 
+## TODO
+[ ] - App lock
+[ ] - Search diaries
+[ ] - Like diaries
+[ ] - Mood selector
+
+
 ## Features to Implement
 Development framework is Flutter.
 
@@ -46,14 +53,7 @@ Change color of each entry (like in Google keeps). [ Automatically change color 
 
 [ Can symbolically link photos for a diary entry. That would require no additional memory for entries but not able to view once the photo in local gets deleted. ]
 
-[ ] - Additional features 
+[ ] - Additional features
 
-## Tasks
 
-# Things in menu
-- option to create/change app password
-- theme change: dark or light theme
-- reminder setting: when to show reminder everyday
-- option to export and import data
-  - export can be done in Documents/DiaryApp/<dairy_app_timestamp>.csv
 

@@ -13,13 +13,23 @@ class DiaryHomePage extends StatefulWidget {
   const DiaryHomePage({
     super.key,
     required this.title,
+    required this.password,
     required this.theme,
+    required this.isLock,
+    required this.isLockFirstTime,
+    required this.setPassword,
     required this.setTheme,
+    required this.setIsLock,
   });
 
   final String title;
+  final String password;
   final bool theme;
+  final bool isLock;
+  final bool isLockFirstTime;
   final void Function(bool) setTheme;
+  final void Function(bool) setIsLock;
+  final void Function(String) setPassword;
 
   @override
   State<DiaryHomePage> createState() => _DiaryHomePageState();
@@ -74,6 +84,7 @@ class _DiaryHomePageState extends State<DiaryHomePage> {
   @override
   Widget build(BuildContext context) {
     // Used future builder in the list of diary entries future returned by the database
+    // TODO: Override back button and back gesture to exit application
     return FutureBuilder<List<Diary>>(
       future: getDiariesFromDB(),
       builder: (context, snapshot) {
@@ -91,7 +102,15 @@ class _DiaryHomePageState extends State<DiaryHomePage> {
             ],
           ),
 
-          drawer: DiaryDrawer(theme: widget.theme, setTheme: widget.setTheme),
+          drawer: DiaryDrawer(
+              password: widget.password,
+              isLock: widget.isLock,
+              theme: widget.theme,
+              isLockFirstTime: widget.isLockFirstTime,
+              setTheme: widget.setTheme,
+              setPassword: widget.setPassword,
+              setIsLock: widget.setIsLock,
+          ),
 
           body: <Widget>[
             // Diary list view

@@ -37,9 +37,9 @@ dependencies:
   sqflite:
   share_plus:
   table_calendar: ^3.0.8
-  flutter_app_lock: ^3.0.0
   permission_handler:
   file_picker:
+  flutter_screen_lock: ^9.0.0+1
 
 
   # The following adds the Cupertino Icons font to your application.

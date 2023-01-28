@@ -1,16 +1,12 @@
+import 'package:diary_app/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter_app_lock/flutter_app_lock.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 import 'diary_homepage.dart';
-import 'lock_screen.dart';
 
 // TODO: Bug - Read password from shared prefs not working
-void readPasswordPrefs(
-  void Function(bool) setPasswordStatus,
-  void Function(String) setPassword
-) async {
+void readPasswordPrefs(void Function(bool) setPasswordStatus,
+    void Function(String) setPassword) async {
   SharedPreferences prefs = await SharedPreferences.getInstance();
   bool status = prefs.getBool("passwordStatus") ?? false;
   String pwd = prefs.getString("password") ?? "";
@@ -18,29 +14,8 @@ void readPasswordPrefs(
   setPassword(pwd);
 }
 
-void main({
-  Duration backgroundLockLatency = const Duration(seconds: 1),
-}) {
-  // Set default password status and password
-  String password = "0000";
-  WidgetsFlutterBinding.ensureInitialized();
-  bool enabled = false;
-  void setPasswordStatus(bool status) { enabled = status; }
-  void setPassword(String pwd) { password = pwd; }
-  // Read it from disk
-  readPasswordPrefs(setPasswordStatus, setPassword);
-
-  runApp(AppLock(
-    builder: (arg) => const MyApp(
-      key: Key('MyApp'),
-    ),
-    lockScreen: LockScreen(
-      key: const Key('LockScreen'),
-      password: password,
-    ),
-    enabled: enabled,
-    backgroundLockLatency: backgroundLockLatency,
-  ));
+void main() {
+  runApp(const MyApp());
 }
 
 class MyApp extends StatefulWidget {
@@ -52,10 +27,31 @@ class MyApp extends StatefulWidget {
 
 class _MyApp extends State<MyApp> {
   bool _isDark = true;
+  bool _isLock = false;
+  bool _isLockFirstTime = false;
+  String _password = "0000";
 
   void setTheme(bool mode) {
     setState(() {
       _isDark = mode;
+    });
+  }
+
+  void setIsLock(bool isLock) {
+    setState(() {
+      _isLock = isLock;
+    });
+  }
+
+  void setIsLockFirstTime(bool isLockFirstTime) {
+    setState(() {
+      _isLockFirstTime = isLockFirstTime;
+    });
+  }
+
+  void setPassword(String password) {
+    setState(() {
+      _password = password;
     });
   }
 
@@ -68,14 +64,30 @@ class _MyApp extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: "Memoir",
-        theme: _isDark ? ThemeData.dark(useMaterial3: true) : ThemeData.light(useMaterial3: true),
-        home: DiaryHomePage(
-          title: "Memoir",
-          theme: _isDark,
-          setTheme: setTheme,
-        ),
+      title: "Memoir",
+      theme: _isDark
+          ? ThemeData.dark(useMaterial3: true)
+          : ThemeData.light(useMaterial3: true),
+      home: _isLock
+          ? LoginPage(
+              password: _password,
+              theme: _isDark,
+              isLock: _isLock,
+              isLockFirstTime: _isLockFirstTime,
+              setPassword: setPassword,
+              setTheme: setTheme,
+              setIsLock: setIsLock,
+            )
+          : DiaryHomePage(
+              title: "Memoir",
+              password: _password,
+              theme: _isDark,
+              isLock: _isLock,
+              isLockFirstTime: _isLockFirstTime,
+              setPassword: setPassword,
+              setTheme: setTheme,
+              setIsLock: setIsLock,
+            ),
     );
   }
 }
-
