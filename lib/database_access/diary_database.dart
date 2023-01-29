@@ -83,7 +83,7 @@ Future<List<Diary>> getDiariesFromDB() async {
   return entries;
 }
 
-void wipeAndInsertIntoDB(List<Diary> diaryEntries) async {
+Future<void> wipeAndInsertIntoDB(List<Diary> diaryEntries) async {
   Database db = await createDatabase();
   db.execute("DELETE FROM diary_entries");
   for (final entry in diaryEntries) {

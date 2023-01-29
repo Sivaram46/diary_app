@@ -8,6 +8,7 @@ import 'package:file_picker/file_picker.dart';
 import 'set_password.dart';
 import 'package:diary_app/database_access/diary_database.dart';
 import 'package:diary_app/models/diary_model.dart';
+import 'package:diary_app/utils/constants.dart';
 
 class DiaryDrawer extends StatefulWidget {
   const DiaryDrawer({
@@ -83,7 +84,7 @@ class _DiaryDrawerState extends State<DiaryDrawer> {
 
                           String result = "";
                           for (final entry in diaryEntries) {
-                            result += "${entry.toCSVLine()}\n";
+                            result += "${entry.toCSVLine()}$nextLineDelim";
                           }
                           backupFile.writeAsString(result);
                         }
@@ -132,14 +133,18 @@ class _DiaryDrawerState extends State<DiaryDrawer> {
                           String path = result.files.first.path ?? "";
                           if (path.isNotEmpty) {
                             File backupFile = File(path);
-                            List<String> contents =
-                                await backupFile.readAsLines();
-                            List<Diary> diaryEntries = contents
+                            String contents =
+                                await backupFile.readAsString();
+
+                            List<String> lines = contents.split(nextLineDelim);
+                            lines.removeLast();
+
+                            List<Diary> diaryEntries = lines
                                 .map((e) => Diary.fromCSVLine(e))
                                 .toList();
 
                             // Wipe out existing data and write to database
-                            wipeAndInsertIntoDB(diaryEntries);
+                            await wipeAndInsertIntoDB(diaryEntries);
                             setState(() {});
                           }
                         }

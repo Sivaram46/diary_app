@@ -1,4 +1,3 @@
-
 class Diary {
   DateTime createdDate;
   String title = "";
@@ -64,9 +63,12 @@ class Diary {
     return '"${createdDate.toString()}","$title","$body","$mood"';
   }
 
-  Diary.fromCSVLine(String line)
-  : createdDate = DateTime.now() {
-    final entries = line.trim().split(",").map((e) => e.substring(1, e.length - 1)).toList();
+  Diary.fromCSVLine(String line) : createdDate = DateTime.now() {
+    final entries = line
+        .trim()
+        .split(",")
+        .map((e) => e.isNotEmpty ? e.substring(1, e.length - 1) : "")
+        .toList();
     createdDate = DateTime.parse(entries[0]);
     title = entries[1];
     body = entries[2];

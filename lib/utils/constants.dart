@@ -37,3 +37,5 @@ final Map<int, String> weekdayMap = {
 const diaryViewPadding = 12.0;
 
 const String appTitle = "Memoir";
+
+const String nextLineDelim = "!@#\$\$#@!";
