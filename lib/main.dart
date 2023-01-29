@@ -1,25 +1,22 @@
 import 'package:diary_app/login_page.dart';
 import 'package:flutter/material.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'diary_homepage.dart';
+import 'utils.dart';
 
 // TODO: Bug - Read password from shared prefs not working
-void readPasswordPrefs(void Function(bool) setPasswordStatus,
-    void Function(String) setPassword) async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  bool status = prefs.getBool("passwordStatus") ?? false;
-  String pwd = prefs.getString("password") ?? "";
-  setPasswordStatus(status);
-  setPassword(pwd);
-}
-
-void main() {
-  runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  SharedPreferences sharedPref = await SharedPreferences.getInstance();
+  runApp(MyApp(sharedPref: sharedPref));
 }
 
 class MyApp extends StatefulWidget {
-  const MyApp({super.key});
+  const MyApp({super.key, required this.sharedPref});
+
+  final SharedPreferences sharedPref;
 
   @override
   State<MyApp> createState() => _MyApp();
@@ -27,9 +24,9 @@ class MyApp extends StatefulWidget {
 
 class _MyApp extends State<MyApp> {
   bool _isDark = true;
+
   bool _isLock = false;
-  bool _isLockFirstTime = false;
-  String _password = "0000";
+  String _password = "";
 
   void setTheme(bool mode) {
     setState(() {
@@ -37,28 +34,28 @@ class _MyApp extends State<MyApp> {
     });
   }
 
-  void setIsLock(bool isLock) {
-    setState(() {
-      _isLock = isLock;
-    });
-  }
-
-  void setIsLockFirstTime(bool isLockFirstTime) {
-    setState(() {
-      _isLockFirstTime = isLockFirstTime;
-    });
-  }
-
-  void setPassword(String password) {
-    setState(() {
-      _password = password;
-    });
-  }
-
   void readTheme() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     bool theme = prefs.getBool('theme') ?? true;
     setTheme(theme);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    // widget.sharedPref.clear();
+
+    setState(() {
+      _isLock = widget.sharedPref.getBool("isLock") ?? false;
+    });
+
+    setState(() {
+      _password = widget.sharedPref.getString("password") ?? "";
+    });
+
+    // print("Is lock (main): $_isLock");
+    // print("password (main): $_password");
   }
 
   @override
@@ -71,22 +68,15 @@ class _MyApp extends State<MyApp> {
       home: _isLock
           ? LoginPage(
               password: _password,
+              sharedPref: widget.sharedPref,
               theme: _isDark,
-              isLock: _isLock,
-              isLockFirstTime: _isLockFirstTime,
-              setPassword: setPassword,
               setTheme: setTheme,
-              setIsLock: setIsLock,
             )
           : DiaryHomePage(
               title: "Memoir",
-              password: _password,
+              sharedPref: widget.sharedPref,
               theme: _isDark,
-              isLock: _isLock,
-              isLockFirstTime: _isLockFirstTime,
-              setPassword: setPassword,
               setTheme: setTheme,
-              setIsLock: setIsLock,
             ),
     );
   }

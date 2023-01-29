@@ -1,30 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screen_lock/flutter_screen_lock.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'constants.dart';
+import 'utils.dart';
 
 class SetPassword extends StatefulWidget {
-  const SetPassword({
-    super.key,
-    required this.password,
-    required this.isLock,
-    required this.isLockFirstTime,
-    required this.setPassword,
-    required this.setIsLock,
-  });
+  const SetPassword({super.key, required this.sharedPref,});
 
-  final String password;
-  final bool isLock;
-  final bool isLockFirstTime;
-  final void Function(bool) setIsLock;
-  final void Function(String) setPassword;
+  final SharedPreferences sharedPref;
 
   @override
   State<SetPassword> createState() => _SetPasswordState();
 }
 
 class _SetPasswordState extends State<SetPassword> {
-  bool _isLock = true;
+  bool _isLock = false;
+  String _password = "";
   bool _isLockFirstTime = false;
 
   void _setNewPassword() {
@@ -43,11 +35,13 @@ class _SetPasswordState extends State<SetPassword> {
       ),
       context: context,
       inputController: controller,
+
       onConfirmed: (matchedText) {
         // set confirmed password and pop out the dialog
-        widget.setPassword(matchedText);
+        widget.sharedPref.setString("password", matchedText);
         Navigator.of(context).pop();
       },
+
       footer: TextButton(
         onPressed: () {
           // Release the confirmation state and return to the initial input state.
@@ -62,7 +56,7 @@ class _SetPasswordState extends State<SetPassword> {
     screenLock(
       title: const Text("Please enter old password"),
       context: context,
-      correctString: widget.password,
+      correctString: _password,
       useBlur: false,
       config: ScreenLockConfig(
         backgroundColor: Theme.of(context).backgroundColor,
@@ -72,14 +66,16 @@ class _SetPasswordState extends State<SetPassword> {
           side: BorderSide.none,
         ),
       ),
+
       onUnlocked: () {
         Navigator.pop(context);
       },
+
     );
   }
 
   void _setPassword(BuildContext context) {
-    if (!widget.isLockFirstTime) {
+    if (!_isLockFirstTime) {
       // TODO: Find out why it is not showing in the order defined
       _setNewPassword();
       _verifyOldPassword(context);
@@ -92,7 +88,22 @@ class _SetPasswordState extends State<SetPassword> {
   @override
   void initState() {
     super.initState();
-    _isLock = widget.isLock;
+
+    setState(() {
+      _isLock = widget.sharedPref.getBool("isLock") ?? false;
+    });
+
+    setState(() {
+      _password = widget.sharedPref.getString("password") ?? "";
+    });
+
+    if (_password.isEmpty) {
+      _isLockFirstTime = true;
+    }
+
+    // print("is locked (set pwd): $_isLock");
+    // print("password (set pwd): $_password");
+    // print("is lock first time (set pwd) $_isLockFirstTime");
   }
 
   @override
@@ -111,10 +122,10 @@ class _SetPasswordState extends State<SetPassword> {
                 onTap: () {
                   setState(() {
                     _isLock = !_isLock;
-                    widget.setIsLock(_isLock);
-                    if (widget.isLockFirstTime && _isLock) {
+                    if (_isLockFirstTime && _isLock) {
                       _setNewPassword();
                     }
+                    widget.sharedPref.setBool("isLock", _isLock);
                   });
                 },
                 child: Row(
@@ -128,7 +139,9 @@ class _SetPasswordState extends State<SetPassword> {
                     Switch(
                       value: _isLock,
                       onChanged: (bool value) {
-                        widget.setIsLock(value);
+                        setState(() {
+                          _isLock = value;
+                        });
                       },
                     ),
                   ],
