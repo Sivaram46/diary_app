@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'diary_model.dart';
+
 import 'diary_view.dart';
 import 'diary_edit.dart';
+import 'package:diary_app/models/diary_model.dart';
 
 class DiaryPage extends StatefulWidget {
   const DiaryPage({

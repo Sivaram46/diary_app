@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:sqflite/sqflite_dev.dart';
 
-import 'diary_model.dart';
+import 'package:diary_app/models/diary_model.dart';
+import 'package:diary_app/utils/constants.dart';
 import 'date_select.dart';
-import 'constants.dart' show diaryViewPadding;
 
 class DiaryEdit extends StatefulWidget {
   const DiaryEdit({

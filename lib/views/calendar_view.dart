@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-import 'diary_model.dart';
+import 'package:diary_app/models/diary_model.dart';
 import 'diary_list.dart';
 
 class CalendarView extends StatefulWidget {
@@ -42,10 +42,6 @@ class _CalendarViewState extends State<CalendarView> {
   void dispose() {
     _selectedEntries.dispose();
     super.dispose();
-  }
-
-  static int getHashCode(DateTime key) {
-    return key.day * 1000000 + key.month * 10000 + key.year;
   }
 
   // TODO: Group same day diary entries with values as index in diaryEntries

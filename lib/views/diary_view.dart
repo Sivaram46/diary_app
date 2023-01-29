@@ -1,9 +1,9 @@
-import 'package:diary_app/diary_share.dart';
 import 'package:flutter/material.dart';
 
- import 'diary_model.dart';
- import 'date_select.dart';
- import 'constants.dart' show diaryViewPadding;
+import 'package:diary_app/models/diary_model.dart';
+import 'date_select.dart';
+import 'diary_share.dart';
+import 'package:diary_app/utils/constants.dart' show diaryViewPadding;
 
 class DiaryView extends StatelessWidget {
   const DiaryView({

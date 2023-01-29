@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screen_lock/flutter_screen_lock.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'constants.dart';
-import 'utils.dart';
+import 'package:diary_app/utils/constants.dart';
 
 class SetPassword extends StatefulWidget {
   const SetPassword({super.key, required this.sharedPref,});

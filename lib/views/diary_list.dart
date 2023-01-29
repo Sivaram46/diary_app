@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'diary_model.dart';
-import 'constants.dart';
+import 'package:diary_app/models/diary_model.dart';
+import 'package:diary_app/utils/constants.dart';
 import 'diary_page.dart';
-import 'constants.dart' show diaryViewPadding;
 
 class DiaryListEntry extends StatefulWidget {
   const DiaryListEntry({
@@ -49,7 +48,7 @@ class _DiaryListEntryState extends State<DiaryListEntry> {
 
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: diaryViewPadding),
-        height: 111,
+        height: 115,
         child: Row(
           children: <Widget>[
             // date display

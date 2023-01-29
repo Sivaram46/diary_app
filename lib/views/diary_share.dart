@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
-import 'diary_model.dart';
+
+import 'package:diary_app/models/diary_model.dart';
 
 class DiaryShare extends StatelessWidget {
   const DiaryShare({super.key, required this.diaryEntry});

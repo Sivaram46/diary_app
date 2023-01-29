@@ -1,4 +1,4 @@
-import 'package:diary_app/constants.dart';
+import 'package:diary_app/utils/constants.dart';
 import 'package:flutter/material.dart';
 
 class DateSelect extends StatelessWidget {
@@ -46,11 +46,11 @@ class DateSelect extends StatelessWidget {
 
           // emoji select
           // TODO: Feature - Mood selector
-          const Icon(
-            Icons.emoji_emotions,
-            size: 30,
-            color: Colors.yellow,
-          )
+          // const Icon(
+          //   Icons.emoji_emotions,
+          //   size: 30,
+          //   color: Colors.yellow,
+          // )
         ],
       ),
     );

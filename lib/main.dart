@@ -1,10 +1,9 @@
-import 'package:diary_app/login_page.dart';
 import 'package:flutter/material.dart';
-import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'diary_homepage.dart';
-import 'utils.dart';
+import 'views/diary_homepage.dart';
+import 'views/login_page.dart';
+import 'utils/constants.dart';
 
 // TODO: Bug - Read password from shared prefs not working
 void main() async {
@@ -61,7 +60,7 @@ class _MyApp extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: "Memoir",
+      title: appTitle,
       theme: _isDark
           ? ThemeData.dark(useMaterial3: true)
           : ThemeData.light(useMaterial3: true),
@@ -73,7 +72,6 @@ class _MyApp extends State<MyApp> {
               setTheme: setTheme,
             )
           : DiaryHomePage(
-              title: "Memoir",
               sharedPref: widget.sharedPref,
               theme: _isDark,
               setTheme: setTheme,

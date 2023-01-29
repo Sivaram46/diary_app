@@ -1,13 +1,13 @@
 import 'dart:io';
 
-import 'package:diary_app/diary_database.dart';
-import 'package:diary_app/diary_model.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:file_picker/file_picker.dart';
 
 import 'set_password.dart';
+import 'package:diary_app/database_access/diary_database.dart';
+import 'package:diary_app/models/diary_model.dart';
 
 class DiaryDrawer extends StatefulWidget {
   const DiaryDrawer({

@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
-import 'diary_model.dart';
+import 'package:diary_app/models/diary_model.dart';
 
 Future<Database> createDatabase() async {
   Directory directory = await getApplicationDocumentsDirectory();

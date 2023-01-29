@@ -1,4 +1,3 @@
-import 'package:diary_app/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screen_lock/flutter_screen_lock.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -46,10 +45,10 @@ class _LoginPageState extends State<LoginPage> {
                   children: const <Widget>[
                     CircleAvatar(
                       backgroundColor: Color(0xffa1ade1),
-                      radius: 22.5,
+                      radius: 18,
                       child: Icon(
                         Icons.edit_note,
-                        size: 40,
+                        size: 32,
                         color: Colors.black,
                       ),
                     ),
@@ -58,14 +57,14 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     Icon(
                       Icons.compare_arrows,
-                      size: 40,
+                      size: 30,
                     ),
                     SizedBox(
                       width: 10,
                     ),
                     Icon(
                       Icons.lock,
-                      size: 40,
+                      size: 30,
                     ),
                   ],
                 ),
@@ -100,7 +99,6 @@ class _LoginPageState extends State<LoginPage> {
                           Navigator.pop(context);
                           Navigator.of(context).push(MaterialPageRoute(
                               builder: (context) => DiaryHomePage(
-                                    title: "Memoir",
                                     theme: widget.theme,
                                     setTheme: widget.setTheme,
                                     sharedPref: widget.sharedPref,
